@@ -1,0 +1,91 @@
+﻿pane options
+------------
+path
+data (inherits)
+
+handlesNavigation
+transition
+delayRender
+
+
+pane properties
+---------------
+inlineHtml
+etc
+etc
+etc
+
+
+pane methods
+------------
+loadAndBind()
+render()
+navigate = function (pathOrOptions, data)
+addPane = function (options)
+remove()
+
+
+model methods
+-------------
+initialise
+prebind
+rendered
+dispose
+
+
+pubsub events
+-------------
+__navigate
+navigating
+rendered
+rendered
+
+
+ko.composite
+------------
+pubsub (if singlePubSub === true)
+
+
+ko.composite.options
+--------------
+basePath
+templatePath
+modelPath
+stylesheetPath
+synchronous
+templateExtension
+modelExtension
+stylesheetExtension
+globalSubscribers
+debug
+    splitScripts
+	handleExceptions = true
+noPaneStylesheets
+globalRenderFunction
+navigateMode ('standard', 'reload')
+logLevel ('debug', 'info', 'warn', 'error')
+singlePubSub
+
+
+transition methods
+------------------
+start(element)
+end(element)
+
+
+ModelBinder options
+-------------------
+rendered - function to execute when template rendered and bound
+clear - remove previous content
+
+
+ko.composite.logger
+-------------------
+errorCallback({ message, stack, error })
+debug = function (message) {
+info = function (message) {
+warn = function (message) {
+error = function (message, error) {
+ajax = function (url, jqXHR, textStatus, errorThrown) {
+log = function (level, message) {
+

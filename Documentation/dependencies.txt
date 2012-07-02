@@ -1,0 +1,3 @@
+﻿jquery 1.7.1
+jquery.ba-hashchange
+knockout 2.1.0

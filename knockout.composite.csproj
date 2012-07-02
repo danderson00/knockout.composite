@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C47911B2-341D-4C73-B29C-7A800E3F45D4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>knockout.composite</RootNamespace>
+    <AssemblyName>knockout.composite</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Documentation\dependencies.txt" />
+    <Content Include="Documentation\features.txt" />
+    <Content Include="Documentation\options.txt" />
+    <Content Include="Examples\2. Simple Communication\default.htm" />
+    <Content Include="Examples\2. Simple Communication\left.css" />
+    <Content Include="Examples\2. Simple Communication\left.htm" />
+    <Content Include="Examples\2. Simple Communication\left.js" />
+    <Content Include="Examples\2. Simple Communication\right.css" />
+    <Content Include="Examples\2. Simple Communication\right.htm" />
+    <Content Include="Examples\2. Simple Communication\right.js" />
+    <Content Include="Examples\3. Sharing Observables\list.css" />
+    <Content Include="Examples\3. Sharing Observables\list.htm" />
+    <Content Include="Examples\3. Sharing Observables\right.css" />
+    <Content Include="Examples\3. Sharing Observables\left.css" />
+    <Content Include="Examples\3. Sharing Observables\right.htm" />
+    <Content Include="Examples\3. Sharing Observables\left.htm" />
+    <Content Include="Examples\3. Sharing Observables\default.htm" />
+    <Content Include="Examples\3. Sharing Observables\left.js" />
+    <Content Include="Examples\1. Hello World\helloWorld.htm" />
+    <Content Include="Examples\1. Hello World\default.htm" />
+    <Content Include="Examples\1. Hello World\helloWorld.js" />
+    <Content Include="Examples\4. Navigation\end.htm" />
+    <Content Include="Examples\4. Navigation\start.htm" />
+    <Content Include="Examples\4. Navigation\default.htm" />
+    <Content Include="Examples\4. Navigation\start.js" />
+    <Content Include="Examples\5. Lifecycle\end.css" />
+    <Content Include="Examples\5. Lifecycle\end.js" />
+    <Content Include="Examples\5. Lifecycle\default.htm" />
+    <Content Include="Examples\5. Lifecycle\end.htm" />
+    <Content Include="Examples\5. Lifecycle\start.htm" />
+    <Content Include="Examples\5. Lifecycle\start.js" />
+    <Content Include="Source\utils.proxy.js" />
+    <Content Include="Source\jquery.event.destroyed.js" />
+    <Content Include="Source\Libraries\knockout-2.1.0.debug.js" />
+    <Content Include="Source\Libraries\knockout-2.1.0.js" />
+    <Content Include="Source\PubSub.extensions.js" />
+    <Content Include="Source\ModelBinder.js" />
+    <Content Include="Source\transitions.hide.js" />
+    <Content Include="Source\transitions.replace.js" />
+    <Content Include="Source\transitions.fade.js" />
+    <Content Include="Source\transitions.js" />
+    <Content Include="Source\utils.objects.js" />
+    <Content Include="Source\Libraries\jquery-1.7.1.js" />
+    <Content Include="Source\Libraries\jquery.ba-hashchange.js" />
+    <Content Include="Source\Libraries\jquery.ba-hashchange.min.js" />
+    <Content Include="Source\resources.js" />
+    <Content Include="Source\resources.templates.js" />
+    <Content Include="Source\resources.stylesheets.js" />
+    <Content Include="Source\resources.scripts.js" />
+    <Content Include="Source\logger.js" />
+    <Content Include="Source\Monitor.js" />
+    <Content Include="Source\Pane.js" />
+    <Content Include="Source\history.js" />
+    <Content Include="Source\jquery.complete.js" />
+    <Content Include="Source\bindingHandlers.js" />
+    <Content Include="Source\Libraries\jquery-1.7.1.min.js" />
+    <Content Include="Source\setup.js" />
+    <Content Include="Source\utils.panes.js" />
+    <Content Include="Source\utils.paths.js" />
+    <Content Include="Tests\bindingHandlers.tests.js" />
+    <Content Include="Tests\Panes\inlinePassingParent.htm" />
+    <Content Include="Tests\Panes\inlinePassingChild.htm" />
+    <Content Include="Tests\utils.proxy.tests.js" />
+    <Content Include="Tests\utils.objects.tests.js" />
+    <Content Include="Tests\utils.panes.tests.js" />
+    <Content Include="Tests\Panes\cancel.htm" />
+    <Content Include="Tests\Panes\cancel.js" />
+    <Content Include="Tests\Panes\cancelRender.htm" />
+    <Content Include="Tests\Panes\cancelRender.js" />
+    <Content Include="Tests\Panes\delayRender.htm" />
+    <Content Include="Tests\Panes\delayRender.js" />
+    <Content Include="Tests\transitions.tests.js" />
+    <Content Include="Tests\history.tests.js" />
+    <Content Include="Tests\Panes\addPane.htm" />
+    <Content Include="Tests\Panes\addPane.js" />
+    <Content Include="Tests\Panes\restoreInlineContainer.htm" />
+    <Content Include="Tests\Panes\navigateStaticChild.htm" />
+    <Content Include="Tests\Panes\rendered.htm" />
+    <Content Include="Tests\Panes\rendered.js" />
+    <Content Include="Tests\Panes\scriptTagLoadTest.js" />
+    <Content Include="Tests\Panes\shortcutBindings.htm" />
+    <Content Include="Tests\Panes\Subfolder\duplicateName.js" />
+    <Content Include="Tests\Panes\Subfolder\duplicateName.htm" />
+    <Content Include="Tests\Panes\Subfolder\Nested\duplicateName.htm" />
+    <Content Include="Tests\Panes\Subfolder\Nested\duplicateName.js" />
+    <Content Include="Tests\Panes\Subfolder\Nested\nested.htm" />
+    <Content Include="Tests\Panes\Subfolder\Nested\nested.js" />
+    <Content Include="Tests\Panes\Subfolder\Nested\nestedChild.htm" />
+    <Content Include="Tests\PubSub.tests.js" />
+    <Content Include="Tests\Scripts\json2.js" />
+    <Content Include="Tests\Scripts\sinon.js" />
+    <Content Include="Tests\single.htm" />
+    <Content Include="Tests\Pane.tests.js" />
+    <Content Include="Tests\navigation.tests.js" />
+    <Content Include="Tests\Panes\dependencyPane.htm" />
+    <Content Include="Tests\Panes\dependency.css" />
+    <Content Include="Tests\Panes\dependency.js" />
+    <Content Include="Tests\Panes\dependencyPane.js" />
+    <Content Include="Tests\Panes\inline.htm" />
+    <Content Include="Tests\Panes\inlineChild.htm" />
+    <Content Include="Tests\Panes\loadResource.htm" />
+    <Content Include="Tests\Panes\loadResource.js" />
+    <Content Include="Tests\Panes\navigateChild.htm" />
+    <Content Include="Tests\Panes\navigateChild.js" />
+    <Content Include="Tests\Panes\navigateParent.htm" />
+    <Content Include="Tests\Panes\navigateParent.js" />
+    <Content Include="Tests\Panes\stylesheet.css" />
+    <Content Include="Tests\Panes\stylesheet.htm" />
+    <Content Include="Tests\Panes\subfolderAbsoluteDependency.js" />
+    <Content Include="Tests\Panes\Subfolder\subfolderDependency.css" />
+    <Content Include="Tests\Panes\Subfolder\subfolderDependency.js" />
+    <Content Include="Tests\Panes\Subfolder\subfolderDependencyPane.htm" />
+    <Content Include="Tests\Panes\Subfolder\subfolderDependencyPane.js" />
+    <Content Include="Tests\Panes\Subfolder\subfolderChild.js" />
+    <Content Include="Tests\Panes\Subfolder\subfolderChild.htm" />
+    <Content Include="Tests\Panes\Subfolder\subfolderNavigate.htm" />
+    <Content Include="Tests\Panes\Subfolder\subfolderNoModel.htm" />
+    <Content Include="Tests\Panes\Subfolder\subfolderPane.htm" />
+    <Content Include="Tests\Panes\Subfolder\subfolderPane.js" />
+    <Content Include="Tests\Panes\template.htm" />
+    <Content Include="Tests\Panes\template.js" />
+    <Content Include="Tests\Scripts\defaults.js" />
+    <Content Include="Tests\Panes\container.htm" />
+    <Content Include="Tests\Panes\container.js" />
+    <Content Include="Tests\Panes\noModel.htm" />
+    <Content Include="Tests\Panes\optionsChild.htm" />
+    <Content Include="Tests\Panes\optionsChild.js" />
+    <Content Include="Tests\Panes\optionsParent.htm" />
+    <Content Include="Tests\Panes\optionsParent.js" />
+    <Content Include="Tests\Panes\pane.htm" />
+    <Content Include="Tests\Panes\pane.js" />
+    <Content Include="Tests\Panes\region.htm" />
+    <Content Include="Tests\Panes\region.js" />
+    <Content Include="Tests\resources.tests.js" />
+    <Content Include="Tests\runner.htm" />
+    <Content Include="Tests\Scripts\jquery.mockjax.js" />
+    <Content Include="Tests\Scripts\qunit.css" />
+    <Content Include="Tests\Scripts\qunit.js" />
+    <Content Include="Source\PubSub.js" />
+    <Content Include="Source\resources.models.js" />
+    <Content Include="Tests\Scripts\testHelpers.js" />
+    <Content Include="Tests\Panes\basicTemplate.htm" />
+    <Content Include="Tests\utils.paths.tests.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Tests\NQUnit\NUnitQUnit.cs" />
+    <Compile Include="Tests\NQUnit\QUnitTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Interop.SHDocVw">
+      <HintPath>packages\WatiN.2.0.50\lib\net40\Interop.SHDocVw.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="NQUnit">
+      <HintPath>packages\NQUnit.1.0.4\lib\NET40\NQUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="WatiN.Core">
+      <HintPath>packages\WatiN.2.0.50\lib\net40\WatiN.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Source\pack.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

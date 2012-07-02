@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NQUnit</name>
+    </assembly>
+    <members>
+        <member name="T:NQUnit.QUnitParser">
+            <summary>
+            The class that takes care of firing an IE session using WatiN and parsing the DOM of the page to extract the QUnit information.
+            </summary>
+        </member>
+        <member name="M:NQUnit.QUnitParser.#ctor(System.Int32)">
+            <summary>
+            Default constructor.
+            </summary>
+            <param name="maxWaitInMs">The maximum number of milliseconds before the tests should timeout after page load; -1 for infinity, 0 to not support asynchronous tests</param>
+        </member>
+        <member name="M:NQUnit.QUnitParser.GetQUnitTestResults(System.String)">
+            <summary>
+            Returns an array of QUnitTest objects given a test page URI.
+            </summary>
+            <param name="testPage">The URI of the test page; either a URL or a file path</param>
+            <returns>An array of QUnitTest objects</returns>
+        </member>
+        <member name="M:NQUnit.QUnitParser.Dispose">
+            <summary>
+            Closes the IE instance.
+            </summary>
+        </member>
+        <member name="T:NQUnit.NQUnit">
+            <summary>
+            Entry class for parsing and returning QUnit tests.
+            </summary>
+        </member>
+        <member name="F:NQUnit.NQUnit.ClearCacheBeforeRunningTests">
+            <summary>
+            Clear the browser cache before running tests to ensure you always run against the latest version of a file.
+            </summary>
+        </member>
+        <member name="F:NQUnit.NQUnit.HideBrowserWindow">
+            <summary>
+            Hide the browser window while running tests to stop it from stealing focus.
+            </summary>
+        </member>
+        <member name="M:NQUnit.NQUnit.GetTests(System.String[])">
+            <summary>
+            Returns an array of QUnitTest objects that encapsulate the QUnit tests within the passed in files to test.
+            Will wait for infinity for any asynchronous tests to run.
+            </summary>
+            <param name="filesToTest">A list of one or more files to run tests on relative to the root of the test project.</param>
+            <returns>An array of QUnitTest objects encapsulating the QUnit tests in the given files</returns>
+        </member>
+        <member name="M:NQUnit.NQUnit.GetTests(System.Int32,System.String[])">
+            <summary>
+            Returns an array of QUnitTest objects that encapsulate the QUnit tests within the passed in files to test.
+            </summary>
+            <param name="maxWaitInMs">The maximum number of milliseconds before the tests should timeout after page load; -1 for infinity, 0 to not support asynchronous tests</param>
+            <param name="filesToTest">A list of one or more files to run tests on relative to the root of the test project.</param>
+            <returns>An array of QUnitTest objects encapsulating the QUnit tests in the given files</returns>
+        </member>
+        <member name="T:NQUnit.QUnitParserHelpers">
+            <summary>
+            Contains extension methods to help the QUnitParser
+            </summary>
+        </member>
+        <member name="M:NQUnit.QUnitParserHelpers.Is(System.Xml.Linq.XName,System.String)">
+            <summary>
+            Provides a case-insensitive comparison between an XName element and a string.
+            </summary>
+            <param name="xname">The XName to compare</param>
+            <param name="name">The string to compare</param>
+            <returns>Whether or not the XName and the string where the same (case-insensitive)</returns>
+        </member>
+        <member name="T:NQUnit.QUnitTest">
+            <summary>
+            Encapsulates the information about a QUnit test, including the pass or fail status.
+            </summary>
+        </member>
+        <member name="M:NQUnit.QUnitTest.ToString">
+            <summary>
+            Provides a concise string representation of the test so that unit testing libraries can show a reasonable description of the test.
+            </summary>
+            <returns>A concise string representation of the test</returns>
+        </member>
+        <member name="P:NQUnit.QUnitTest.FileName">
+            <summary>
+            The file name the QUnit test was run from.
+            </summary>
+        </member>
+        <member name="P:NQUnit.QUnitTest.TestName">
+            <summary>
+            The name of the test.
+            </summary>
+        </member>
+        <member name="P:NQUnit.QUnitTest.Result">
+            <summary>
+            The result of the test ("pass" or "fail").
+            </summary>
+        </member>
+        <member name="P:NQUnit.QUnitTest.Message">
+            <summary>
+            If the test failed this contains more information explaining why.
+            </summary>
+        </member>
+        <member name="P:NQUnit.QUnitTest.InitializationException">
+            <summary>
+            Will be thrown if there was a problem initializing the QUnit test.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,25 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <title>Lifecycle</title>
+        
+        <script type="text/javascript" src="../../Source/Libraries/jquery-1.7.1.js"></script>
+        <script type="text/javascript" src="../../Source/Libraries/knockout-2.1.0.debug.js"></script>
+        
+        <!-- add ba-hashchange for back button support - this must be declared before knockout.composite.js -->
+        <script type="text/javascript" src="../../Source/Libraries/jquery.ba-hashchange.js"></script>
+
+        <script type="text/javascript" src="../../knockout.composite.js"></script>
+                
+        <script type="text/javascript">
+            $(function () {
+                ko.applyBindings();
+            });
+        </script>
+    </head>
+    
+    <body>
+        <!-- A couple of basic transitions are provided out of the box. It's simple to implement new ones. -->
+        <div data-bind="region: { path: 'start', transition: 'fade' }"></div>
+    </body>
+</html>

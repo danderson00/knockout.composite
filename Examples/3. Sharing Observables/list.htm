@@ -1,0 +1,7 @@
+﻿<div class="list">
+    <!-- the $data property is exposed by knockout and contains the current view model. we were passed an observableArray of strings -->
+    <ul data-bind="foreach: $data">
+        <!-- as we're inside a foreach control flow binding, the binding context changes to the item. $data now corresponds with the elements of the array -->
+        <li data-bind="text: $data"></li>
+    </ul>
+</div>

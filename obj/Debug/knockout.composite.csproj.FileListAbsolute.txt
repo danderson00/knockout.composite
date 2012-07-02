@@ -1,0 +1,15 @@
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\knockout.composite.dll
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\knockout.composite.pdb
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\NQUnit.dll
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\nunit.framework.dll
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\nunit.mocks.dll
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\pnunit.framework.dll
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\WatiN.Core.dll
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\obj\Debug\knockout.composite.dll
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\obj\Debug\knockout.composite.pdb
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\NQUnit.pdb
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\NQUnit.xml
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\nunit.framework.xml
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\WatiN.Core.xml
+C:\Users\dale.LOCAL\Documents\Visual Studio 2010\Projects\Libraries\knockout.composite\bin\Debug\Interop.SHDocVw.dll

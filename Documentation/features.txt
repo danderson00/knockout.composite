@@ -1,0 +1,11 @@
+﻿Automatic resource loading with powerful and flexible optimisations
+  - supports loading in the background after the first page has loaded
+Semi-automatic memory management (soon to me much better)
+Automatic back button / bookmark support
+Automatic, extensible pane transitions
+Great debugging experience with chrome
+
+
+Coming...
+Better memory management - automatic clean up when element is destroyed
+Automatic multi-threading with WebWorkers when panes have option set
