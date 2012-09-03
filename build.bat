@@ -1,0 +1,1 @@
+Tools\jsPack.exe /recursive .
