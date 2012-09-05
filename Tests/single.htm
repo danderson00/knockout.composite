@@ -8,7 +8,7 @@
     <script type="text/javascript" src="Scripts/qunit.js"></script>
     <script type="text/javascript" src="Scripts/json2.js"></script>
     <script type="text/javascript" src="Scripts/jquery.mockjax.js"></script>
-    <script type="text/javascript" src="Scripts/sinon.js"></script>
+    <script type="text/javascript" src="Scripts/sinon-1.4.2.js"></script>
 
     <script type="text/javascript" src="../knockout.composite.js"></script>
 
@@ -17,12 +17,14 @@
 
     <script type="text/javascript">
         $(function () {
-            asyncTest('model.childrenRendered is called after all child panes finish rendering', function () {
-                expect(2);
-                Helpers.renderPane('rendered', null, function () {
-                    equal($('#qunit-fixture span:eq(1)').text(), 'test');
-                    equal($('#qunit-fixture #paneValue').text(), 'test');
-                });
+            test("script dependencies are loaded cross domain if a full URL is provided", function () {
+                var oldLoadFunction = ko.composite.resources.loadCrossDomainScript;
+                var spy = sinon.spy();
+                ko.composite.resources.loadCrossDomainScript = spy;
+                ko.composite.resources.loadDependencies('', { requires: { scripts: ['http://another.domain.com/script.js']} });
+                ko.composite.resources.loadCrossDomainScript = oldLoadFunction;
+
+                ok(spy.called);
             });
         });
     </script>

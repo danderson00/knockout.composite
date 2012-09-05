@@ -15,7 +15,8 @@
         count--;
         if (count === 0)
             for (var i = callbacks.length - 1; i >= 0; i--) {
-                setTimeout(callbacks[i]);
+                callbacks[i]();
+//                setTimeout(callbacks[i]);
                 callbacks.splice(i, 1);
             }
     };

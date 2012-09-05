@@ -31,7 +31,7 @@
         },
         initialise: function (model, preload) {
             if (preload) {
-                $.when(ko.composite.resources.loadDependencies("", preload)).done(function () {
+                $.when(ko.composite.resources.loadDependencies("", { requires: preload })).done(function () {
                     ko.applyBindings(model);
                 });
             } else {
@@ -48,16 +48,17 @@ function PubSub(options) {
     this.messages = messages;
     var lastUid = -1;
 
-    function publish(message, data, sync) {
-        var subscribers = getSubscribers(message);
-        var subscribersCopy = subscribers.slice(0);
+    function publish(envelope) {
+        var subscribers = getSubscribers(envelope.message);
+        var subscribersCopy = subscribers.concat(getSubscribers('*'));
+        addGlobalSubscribers(envelope.message, subscribersCopy);        
 
-        if (subscribers.length == 0)
+        if (subscribersCopy.length == 0)
             return false;
 
         for (var i = 0; i < subscribersCopy.length; i++) {            
             removeSubscriberIfOnceOnly(subscribersCopy[i]);
-            if (sync === true || self.forceSync === true)
+            if (envelope.sync === true || self.forceSync === true)
                 executeSubscriber(subscribersCopy[i].func);
             else {
                 (function (subscriber) {
@@ -73,17 +74,17 @@ function PubSub(options) {
         function executeSubscriber(func) {
             if (ko.composite.options.debug.handleExceptions)
                 try {
-                    func(data);
+                    func(envelope.data, envelope);
                 } catch (e) {
-                    if (sync || self.forceSync)
+                    if (envelope.sync || self.forceSync)
                     // if we are running synchronously, rethrow the exception after a timeout, 
                     // or it will prevent the rest of the subscribers from receiving the message
-                        setTimeout(handleException(e, message), 0);
+                        setTimeout(handleException(e, envelope.message), 0);
                     else
-                        handleException(e, message)();
+                        handleException(e, envelope.message)();
                 }
             else
-                func(data);
+                func(envelope.data, envelope);
         }
 
         function handleException(e, message) {
@@ -98,12 +99,14 @@ function PubSub(options) {
         }
     };
 
-    this.publish = function (message, data) {
-        return publish(message, data, false);
+    this.publish = function (messageOrEnvelope, data) {
+        var envelope = messageOrEnvelope && messageOrEnvelope.message ?
+            messageOrEnvelope : { message: messageOrEnvelope, data: data, sync: false };
+        return publish(envelope);
     };
 
     this.publishSync = function (message, data) {
-        return publish(message, data, true);
+        return publish({ message: message, data: data, sync: true });
     };
 
     this.subscribeOnce = function (message, func) {
@@ -199,8 +202,6 @@ function PubSub(options) {
             subscribers = [];
         }
 
-        addGlobalSubscribers(message, subscribers);
-
         return subscribers;
     }
     
@@ -278,23 +279,22 @@ function PubSub(options) {
     };
 
     this.error = function (message, error) {
-        if (logLevel <= 3) {
-            var logString;
-            if (error && error.stack)
-                logString = message + ' ' + error.stack;
-            else if (error && error.message)
-                logString = message + ' ' + error.message;
-            else
-                logString = message + ' ' + (error ? error : '');
+        var logString;
+        if (error && error.stack)
+            logString = message + ' ' + error.stack;
+        else if (error && error.message)
+            logString = message + ' ' + error.message;
+        else
+            logString = message + ' ' + (error ? error : '');
 
-
+        if (logLevel <= 3)
             this.log('error', logString);
-            if (this.errorCallback)
-                $.when(this.errorCallback(logString))
-                    .fail(function() {
-                        self.log('error', 'Unable to successfully log error!');
-                    });
-        }
+
+        if (this.errorCallback)
+            $.when(this.errorCallback(logString))
+                .fail(function () {
+                    self.log('error', 'Unable to successfully log error!');
+                });
     };
 
     this.ajax = function (url, jqXHR, textStatus, errorThrown) {
@@ -361,6 +361,10 @@ function PubSub(options) {
         return path.charAt(0) == '/';
     };
 
+    utils.isFullUrl = function(path) {
+        return path.indexOf('://') > 0;
+    };
+
     utils.stripPathAndExtension = function(path) {
         var start = path.lastIndexOf('/') + 1;
         var end = path.lastIndexOf('.');
@@ -425,17 +429,26 @@ function PubSub(options) {
     };
     
     utils.bindPane = function(element, options, parentPane) {
+        if(!element) throw "bindPane: argument element must be provided";
         return ko.bindingHandlers.pane.update(element, function () { return utils.inheritParentPath(options); }, function () { return {}; }, { __pane: parentPane });                
     };
 
     utils.addPane = function(parentElement, options, parentPane) {
+        if(!parentElement) throw "addPane: argument parentElement must be provided";
         var container = $('<div></div').appendTo(parentElement)[0];
         return utils.bindPane(container, options, parentPane);
     };
 
     utils.addPaneAfter = function(element, options, parentPane) {
+        if(!element) throw "addPaneAfter: argument element must be provided";
         var container = $('<div></div').insertAfter(element)[0];
         return utils.bindPane(container, options, parentPane);
+    };
+
+    utils.openWindow = function(options, parentPane) {
+        var newWindow = window.open();
+        $('head link,style').clone().appendTo(newWindow.document.head);
+        ko.composite.utils.bindPane(newWindow.document.body, options, parentPane);
     };
 
     utils.extractPane = function(viewModel, bindingContext) {
@@ -653,9 +666,8 @@ function PubSub(options) {
         });
 
         function executeScript(script) {
-            if (ko.composite.options.debug.splitScripts === true) {
+            if (ko.composite.options.debug.splitScripts === true && shouldSplit(script)) {
                 var scripts = script.match(/(.*(\r|\n))*?(.*\/{2}\@ sourceURL.*)/g);
-                //var scripts = script.match(/(.|\r|\n)*?(\/{2}\@ sourceURL.*)/g);
 
                 if (scripts === null)
                     $.globalEval(appendSourceUrl(script));
@@ -673,6 +685,38 @@ function PubSub(options) {
         function appendSourceUrl(script) {
             return script + '\n//@ sourceURL=' + url;
         }
+
+        function shouldSplit(script) {
+            var tagMatches = script.match("(//@ sourceURL=)");
+            return tagMatches && tagMatches.length > 1;
+        }
+    };
+
+    resources.loadCrossDomainScript = function (url) {
+        return resources.loadResource(url, function () {
+            return resources.loadResource(url, function () {
+                var deferred = $.Deferred();
+
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                var failed = false;
+
+                script.addEventListener("load", function () {
+                    if (!failed)
+                        deferred.resolve();
+                }, false);
+
+                script.addEventListener("error", function () {
+                    failed = true;
+                    deferred.reject();
+                }, false);
+
+                script.src = url;
+                head.appendChild(script);
+
+                return deferred;
+            });
+        });
     };
 })(ko.composite.resources);(function (resources) {
     var options = ko.composite.options;
@@ -780,8 +824,11 @@ function PubSub(options) {
 
     // firefox sucks. Seems to be no way to hook in to a failure event when loading scripts using a <script /> tag with a src attribute.
     resources.loadModel = function (path) {
-        if (ko.composite.models[path])
+        if (ko.composite.models[path]) {
+            if (ko.composite.models[path].options)
+                return resources.loadDependencies(path, ko.composite.models[path].options);
             return null;
+        }
 
         var deferred = $.Deferred();
         var url = utils.resourcePath(options.modelPath, path, options.modelExtension);
@@ -793,7 +840,7 @@ function PubSub(options) {
                     deferred.resolve();
                 } else {
                     var model = resources.assignModelPath(path);
-                    $.when(resources.loadDependencies(path, model.options.requires))
+                    $.when(resources.loadDependencies(path, model.options))
                         .always(function () {
                             deferred.resolve();
                         });
@@ -817,29 +864,35 @@ function PubSub(options) {
         return model;
     };
 
-    resources.loadDependencies = function (path, dependencies) {
+    resources.loadDependencies = function (path, modelOptions) {
         var deferreds = [];
+        var dependencies = modelOptions.requires;
 
         if (dependencies) {
-            loadDependencyType(resources.loadScript, dependencies.scripts, options.modelPath, options.modelExtension);
-            loadDependencyType(resources.loadStylesheet, dependencies.stylesheets, options.stylesheetPath, options.stylesheetExtension);
-            loadDependencyType(resources.loadTemplate, dependencies.templates, options.templatePath, options.templateExtension);
+            loadDependencyType(resources.loadScript, resources.loadCrossDomainScript, dependencies.scripts, options.modelPath, options.modelExtension);
+            loadDependencyType(resources.loadStylesheet, resources.loadStylesheet, dependencies.stylesheets, options.stylesheetPath, options.stylesheetExtension);
+            loadDependencyType(resources.loadTemplate, resources.loadTemplate, dependencies.templates, options.templatePath, options.templateExtension);
         }
 
+        modelOptions.requires = null;
         return $.when.apply(window, deferreds);
 
-        function loadDependencyType(loadFunction, list, basePath, extension) {
+        function loadDependencyType(loadFunction, crossDomainLoadFunction, list, basePath) {
             if (list)
-                for (var i = 0; i < list.length; i++)
-                    deferreds.push(loadFunction(dependencyPath(path, list[i], basePath, extension)));
+                for (var i = 0; i < list.length; i++) {
+                    var thisDependencyPath = list[i];
+                    deferreds.push(utils.isFullUrl(thisDependencyPath)
+                            ? crossDomainLoadFunction(thisDependencyPath)
+                            : loadFunction(dependencyPath(path, thisDependencyPath, basePath)));
+                }
         }
 
         // :-P
-        function dependencyPath(pathToPane, pathToDependency, basePath, extension) {
+        function dependencyPath(pathToPane, pathToDependency, basePath) {
             if (utils.isAbsolute(pathToDependency))
-                return utils.resourcePath('', pathToDependency, extension);
+                return utils.resourcePath('', pathToDependency);
             else
-                return utils.resourcePath('', utils.combinePaths(utils.resourcePath(basePath, pathToPane, extension), pathToDependency), extension);
+                return utils.resourcePath('', utils.combinePaths(utils.resourcePath(basePath, pathToPane), pathToDependency));
         }
     };
 })(ko.composite.resources);ko.composite.Monitor = function (callback) {
@@ -859,7 +912,8 @@ function PubSub(options) {
         count--;
         if (count === 0)
             for (var i = callbacks.length - 1; i >= 0; i--) {
-                setTimeout(callbacks[i]);
+                callbacks[i]();
+//                setTimeout(callbacks[i]);
                 callbacks.splice(i, 1);
             }
     };
@@ -1018,7 +1072,7 @@ function PubSub(options) {
                 binder.loadAndBind();
             });
 
-            if (self.parentPane && !self.parentPane.handlesNavigation && ko.composite.options.singlePubSub !== true) {
+            if (self.parentPane && !self.parentPane.handlesNavigation && self.parentPane.pubsub !== self.pubsub) {
                 self.parentPane.pubsub.subscribe("__navigate", function (navigateOptions) {
                     self.navigate(navigateOptions.path, navigateOptions.data);
                 });
@@ -1133,45 +1187,57 @@ if ($(window).hashchange !== undefined) {
         var defaultOptionsJson;
         var currentOptionsJson;
 
+        history.properties = {};
+        history.currentOptions = parseCurrentOptions();
+        
+        $(window).hashchange(hashChanged);
+
         history.initialise = function (navigationPane) {
             pane = navigationPane;
-
             defaultHash = currentHash();
-            defaultOptions = { path: navigationPane.path, data: navigationPane.data };
+            defaultOptions = { path: navigationPane.path, data: navigationPane.data, p: {} };
             defaultOptionsJson = JSON.stringify(defaultOptions);
 
-            var currentOptions = parseCurrentOptions();
-            currentOptionsJson = JSON.stringify(currentOptions);
+            history.currentOptions = parseCurrentOptions();
+            currentOptionsJson = JSON.stringify(history.currentOptions);
 
-            navigationPane.path = currentOptions.path;
-            navigationPane.data = currentOptions.data;
+            navigationPane.path = history.currentOptions.path;
+            navigationPane.data = history.currentOptions.data;
 
-            $(window).hashchange(hashChanged);
 
-            pane.pubsub.subscribe('__navigate', function (navigateOptions) {
-                currentOptionsJson = JSON.stringify({ path: navigateOptions.path, data: navigateOptions.data });
-                if (currentOptionsJson !== defaultOptionsJson || currentHash() !== defaultHash)
-                    queueAction(function () {
-                        window.location.hash = currentOptionsJson;
-                        if (ko.composite.options.navigateMode === 'reload')
-                            window.location.reload();
-                    });
-            });
+            pane.pubsub.subscribe('__navigate', navigating);
         };
+
+        history.update = function() {
+            window.location.hash = JSON.stringify(getOptions(history.currentOptions));
+        };
+
+        function getOptions(navigateOptions) {
+            return {
+                path: navigateOptions ? navigateOptions.path : undefined,
+                data: navigateOptions ? navigateOptions.data : undefined,
+                p: history.properties
+            };
+        }
 
         function hashChanged() {
-            var hashOptions = parseCurrentOptions();
-            var hashJson = JSON.stringify(hashOptions);
+            var hashOptions = parseCurrentOptions() || {};
+            var hashData = JSON.stringify(hashOptions.data);
+            var currentOptions = currentOptionsJson ? JSON.parse(currentOptionsJson) : {};
+            var currentData = JSON.stringify(currentOptions.data);
 
-            if (hashJson != currentOptionsJson) {
-                pane.navigate(hashOptions.path, hashOptions.data);
-            }
+            if (hashOptions.path !== currentOptions.path || hashData != currentData)
+                if(pane) pane.navigate(hashOptions.path, hashOptions.data);
         };
-
-        function queueAction(action) {
-            if (updateTimer)
-                clearTimeout(updateTimer);
-            updateTimer = setTimeout(action, 0);
+        
+        function navigating(navigateOptions) {
+            currentOptionsJson = JSON.stringify(getOptions(navigateOptions));
+            if (currentOptionsJson !== defaultOptionsJson || currentHash() !== defaultHash)
+                queueAction(function () {
+                    window.location.hash = currentOptionsJson;
+                    if (ko.composite.options.navigateMode === 'reload')
+                        window.location.reload();
+                });
         }
 
         function parseCurrentOptions() {
@@ -1181,19 +1247,66 @@ if ($(window).hashchange !== undefined) {
             if (ko.composite.options.bootstrapper)
                 options = ko.composite.options.bootstrapper(hash);
 
-            if (!options && hash)
-                try {
-                    options = JSON.parse(hash);
-                } catch (e) { }
+            if (!options) {
+                if (hash)
+                    try {
+                        options = JSON.parse(hash);
+                        history.properties = options.p || { };
+                    } catch (e) { }
+                else
+                    history.properties = { };
+            }
 
             return options ? options : defaultOptions;
+        }
+
+        function queueAction(action) {
+            if (updateTimer)
+                clearTimeout(updateTimer);
+            updateTimer = setTimeout(action, 0);
         }
 
         function currentHash() {
             return unescape(window.location.hash.replace(/^#/, ''));
         }
     })(ko.composite.history);
-}ko.composite.transitions = {
+}(function() {
+    ko.extenders.history = function (target, options) {
+        if (!options || !options.key) return;
+
+        var key = options.key;
+        var history = ko.composite.history;
+
+        var storedValue = history.properties[key];
+        if (storedValue !== undefined)
+            target(storedValue);
+
+        target.subscribe(function (value) {
+            if (!value)
+                delete history.properties[key];
+            else
+                history.properties[key] = value;
+            history.update();
+        });
+
+        function updateTarget() {
+            target(history.properties[key]);
+        }
+
+        $(window).hashchange(updateTarget);
+        
+        if(options.pane) {
+            var oldDispose = options.pane.dispose;
+            options.pane.dispose = function() {
+                if (oldDispose) oldDispose();
+                $(window).unbind('hashchange', updateTarget);
+            };
+        }
+        
+        return target;
+    };
+})();
+ko.composite.transitions = {
     create: function(name) {
         return name && ko.composite.transitions[name] ? new ko.composite.transitions[name]() : null;
     }

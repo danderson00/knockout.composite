@@ -18,23 +18,22 @@
     };
 
     this.error = function (message, error) {
-        if (logLevel <= 3) {
-            var logString;
-            if (error && error.stack)
-                logString = message + ' ' + error.stack;
-            else if (error && error.message)
-                logString = message + ' ' + error.message;
-            else
-                logString = message + ' ' + (error ? error : '');
+        var logString;
+        if (error && error.stack)
+            logString = message + ' ' + error.stack;
+        else if (error && error.message)
+            logString = message + ' ' + error.message;
+        else
+            logString = message + ' ' + (error ? error : '');
 
-
+        if (logLevel <= 3)
             this.log('error', logString);
-            if (this.errorCallback)
-                $.when(this.errorCallback(logString))
-                    .fail(function() {
-                        self.log('error', 'Unable to successfully log error!');
-                    });
-        }
+
+        if (this.errorCallback)
+            $.when(this.errorCallback(logString))
+                .fail(function () {
+                    self.log('error', 'Unable to successfully log error!');
+                });
     };
 
     this.ajax = function (url, jqXHR, textStatus, errorThrown) {

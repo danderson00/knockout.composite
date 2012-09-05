@@ -40,17 +40,18 @@
     };
 
     Helpers.navigate = function (pane, path, data, tests, timeout, startQunit) {
-        pane.navigate(path, data);
         executeTestsWhenRendered(pane.pubsub, tests, startQunit);
+        pane.navigate(path, data);
     };
 
     Helpers.navigateParent = function (pane, path, data, tests, timeout, startQunit) {
-        pane.parentPane.navigate(path, data);
         executeTestsWhenRendered(pane.pubsub, tests, startQunit);
+        pane.parentPane.navigate(path, data);
     };
 
     function executeTestsWhenRendered(pubsub, tests, startQunit) {
-        pubsub.subscribeOnce('rendered', function () {
+        var token = pubsub.subscribePersistent('rendered', function () {
+            pubsub.unsubscribe(token);
             if (tests)
                 tests();
 

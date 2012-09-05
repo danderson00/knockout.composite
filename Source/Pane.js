@@ -54,7 +54,7 @@
                 binder.loadAndBind();
             });
 
-            if (self.parentPane && !self.parentPane.handlesNavigation && ko.composite.options.singlePubSub !== true) {
+            if (self.parentPane && !self.parentPane.handlesNavigation && self.parentPane.pubsub !== self.pubsub) {
                 self.parentPane.pubsub.subscribe("__navigate", function (navigateOptions) {
                     self.navigate(navigateOptions.path, navigateOptions.data);
                 });

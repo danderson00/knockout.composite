@@ -18,8 +18,11 @@
 
     // firefox sucks. Seems to be no way to hook in to a failure event when loading scripts using a <script /> tag with a src attribute.
     resources.loadModel = function (path) {
-        if (ko.composite.models[path])
+        if (ko.composite.models[path]) {
+            if (ko.composite.models[path].options)
+                return resources.loadDependencies(path, ko.composite.models[path].options);
             return null;
+        }
 
         var deferred = $.Deferred();
         var url = utils.resourcePath(options.modelPath, path, options.modelExtension);
@@ -31,7 +34,7 @@
                     deferred.resolve();
                 } else {
                     var model = resources.assignModelPath(path);
-                    $.when(resources.loadDependencies(path, model.options.requires))
+                    $.when(resources.loadDependencies(path, model.options))
                         .always(function () {
                             deferred.resolve();
                         });
@@ -55,29 +58,35 @@
         return model;
     };
 
-    resources.loadDependencies = function (path, dependencies) {
+    resources.loadDependencies = function (path, modelOptions) {
         var deferreds = [];
+        var dependencies = modelOptions.requires;
 
         if (dependencies) {
-            loadDependencyType(resources.loadScript, dependencies.scripts, options.modelPath, options.modelExtension);
-            loadDependencyType(resources.loadStylesheet, dependencies.stylesheets, options.stylesheetPath, options.stylesheetExtension);
-            loadDependencyType(resources.loadTemplate, dependencies.templates, options.templatePath, options.templateExtension);
+            loadDependencyType(resources.loadScript, resources.loadCrossDomainScript, dependencies.scripts, options.modelPath, options.modelExtension);
+            loadDependencyType(resources.loadStylesheet, resources.loadStylesheet, dependencies.stylesheets, options.stylesheetPath, options.stylesheetExtension);
+            loadDependencyType(resources.loadTemplate, resources.loadTemplate, dependencies.templates, options.templatePath, options.templateExtension);
         }
 
+        modelOptions.requires = null;
         return $.when.apply(window, deferreds);
 
-        function loadDependencyType(loadFunction, list, basePath, extension) {
+        function loadDependencyType(loadFunction, crossDomainLoadFunction, list, basePath) {
             if (list)
-                for (var i = 0; i < list.length; i++)
-                    deferreds.push(loadFunction(dependencyPath(path, list[i], basePath, extension)));
+                for (var i = 0; i < list.length; i++) {
+                    var thisDependencyPath = list[i];
+                    deferreds.push(utils.isFullUrl(thisDependencyPath)
+                            ? crossDomainLoadFunction(thisDependencyPath)
+                            : loadFunction(dependencyPath(path, thisDependencyPath, basePath)));
+                }
         }
 
         // :-P
-        function dependencyPath(pathToPane, pathToDependency, basePath, extension) {
+        function dependencyPath(pathToPane, pathToDependency, basePath) {
             if (utils.isAbsolute(pathToDependency))
-                return utils.resourcePath('', pathToDependency, extension);
+                return utils.resourcePath('', pathToDependency);
             else
-                return utils.resourcePath('', utils.combinePaths(utils.resourcePath(basePath, pathToPane, extension), pathToDependency), extension);
+                return utils.resourcePath('', utils.combinePaths(utils.resourcePath(basePath, pathToPane), pathToDependency));
         }
     };
 })(ko.composite.resources);

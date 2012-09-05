@@ -1,6 +1,17 @@
 ﻿$(function () {
     module('PubSub');
 
+    test('publish method accepts evelope as first parameter', function () {
+        var pubsub = new PubSub();
+        var spy = sinon.spy();
+
+        pubsub.subscribe('testMessage', spy);
+        pubsub.publish({ message: 'testMessage', data: 'test', sync: true });
+
+        ok(spy.calledWith('test'));
+        
+    });
+
     test('unsubscribeAllExceptInternal unsubscribes all listeners except internals', function () {
         var pubsub = new PubSub();
         var normalToken = pubsub.subscribe('test', function () { });
@@ -150,7 +161,34 @@
         equal(spy.callCount, 1);
     });
 
+    test("subscribers are passed data as first argument and envelope as second", function () {
+        var pubsub = new PubSub({ forceSync: true });
+        var spy = sinon.spy();
+        pubsub.subscribe('test1', spy);
+        pubsub.publish('test1', 'test');
+        ok(spy.calledOnce);
+        equal(spy.firstCall.args[1].message, 'test1');
+        equal(spy.firstCall.args[1].data, 'test');
+    });
 
+    test("subscribers to '*' are executed for every message", function () {
+        var pubsub = new PubSub({ forceSync: true });
+        var spy = sinon.spy();
+        pubsub.subscribe('*', spy);
+        pubsub.publish('test1');
+        pubsub.publish('test2');
+        equal(spy.callCount, 2);
+    });
+
+    test("subscribers to '*' are passed correct message names", function () {
+        var pubsub = new PubSub({ forceSync: true });
+        var spy = sinon.spy();
+        pubsub.subscribe('*', spy);
+        pubsub.publish('test1', '1');
+        pubsub.publish('test2', '2');
+        equal(spy.firstCall.args[1].message, 'test1');
+        equal(spy.secondCall.args[1].message, 'test2');
+    });
 
 
     module("PubSub.original", {

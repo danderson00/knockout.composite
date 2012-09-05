@@ -6,16 +6,17 @@ function PubSub(options) {
     this.messages = messages;
     var lastUid = -1;
 
-    function publish(message, data, sync) {
-        var subscribers = getSubscribers(message);
-        var subscribersCopy = subscribers.slice(0);
+    function publish(envelope) {
+        var subscribers = getSubscribers(envelope.message);
+        var subscribersCopy = subscribers.concat(getSubscribers('*'));
+        addGlobalSubscribers(envelope.message, subscribersCopy);        
 
-        if (subscribers.length == 0)
+        if (subscribersCopy.length == 0)
             return false;
 
         for (var i = 0; i < subscribersCopy.length; i++) {            
             removeSubscriberIfOnceOnly(subscribersCopy[i]);
-            if (sync === true || self.forceSync === true)
+            if (envelope.sync === true || self.forceSync === true)
                 executeSubscriber(subscribersCopy[i].func);
             else {
                 (function (subscriber) {
@@ -31,17 +32,17 @@ function PubSub(options) {
         function executeSubscriber(func) {
             if (ko.composite.options.debug.handleExceptions)
                 try {
-                    func(data);
+                    func(envelope.data, envelope);
                 } catch (e) {
-                    if (sync || self.forceSync)
+                    if (envelope.sync || self.forceSync)
                     // if we are running synchronously, rethrow the exception after a timeout, 
                     // or it will prevent the rest of the subscribers from receiving the message
-                        setTimeout(handleException(e, message), 0);
+                        setTimeout(handleException(e, envelope.message), 0);
                     else
-                        handleException(e, message)();
+                        handleException(e, envelope.message)();
                 }
             else
-                func(data);
+                func(envelope.data, envelope);
         }
 
         function handleException(e, message) {
@@ -56,12 +57,14 @@ function PubSub(options) {
         }
     };
 
-    this.publish = function (message, data) {
-        return publish(message, data, false);
+    this.publish = function (messageOrEnvelope, data) {
+        var envelope = messageOrEnvelope && messageOrEnvelope.message ?
+            messageOrEnvelope : { message: messageOrEnvelope, data: data, sync: false };
+        return publish(envelope);
     };
 
     this.publishSync = function (message, data) {
-        return publish(message, data, true);
+        return publish({ message: message, data: data, sync: true });
     };
 
     this.subscribeOnce = function (message, func) {
@@ -156,8 +159,6 @@ function PubSub(options) {
         } else {
             subscribers = [];
         }
-
-        addGlobalSubscribers(message, subscribers);
 
         return subscribers;
     }

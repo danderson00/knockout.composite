@@ -1,3 +1,3 @@
 ﻿(function () {
-    ko.composite.registerModel({ requires: { templates: ['basicTemplate'] } });
+    ko.composite.registerModel({ requires: { templates: ['basicTemplate.htm'] } });
 })();

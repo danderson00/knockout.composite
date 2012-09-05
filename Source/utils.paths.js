@@ -38,6 +38,10 @@
         return path.charAt(0) == '/';
     };
 
+    utils.isFullUrl = function(path) {
+        return path.indexOf('://') > 0;
+    };
+
     utils.stripPathAndExtension = function(path) {
         var start = path.lastIndexOf('/') + 1;
         var end = path.lastIndexOf('.');

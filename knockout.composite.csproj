@@ -41,7 +41,7 @@
     <Content Include="Documentation\dependencies.txt" />
     <Content Include="Documentation\features.txt" />
     <Content Include="Documentation\options.txt" />
-    <Content Include="Examples\2. Simple Communication\default.htm" />
+    <Content Include="Examples\2. Simple Communication\index.html" />
     <Content Include="Examples\2. Simple Communication\left.css" />
     <Content Include="Examples\2. Simple Communication\left.htm" />
     <Content Include="Examples\2. Simple Communication\left.js" />
@@ -54,21 +54,79 @@
     <Content Include="Examples\3. Sharing Observables\left.css" />
     <Content Include="Examples\3. Sharing Observables\right.htm" />
     <Content Include="Examples\3. Sharing Observables\left.htm" />
-    <Content Include="Examples\3. Sharing Observables\default.htm" />
+    <Content Include="Examples\3. Sharing Observables\index.html" />
     <Content Include="Examples\3. Sharing Observables\left.js" />
     <Content Include="Examples\1. Hello World\helloWorld.htm" />
-    <Content Include="Examples\1. Hello World\default.htm" />
+    <Content Include="Examples\1. Hello World\index.html" />
     <Content Include="Examples\1. Hello World\helloWorld.js" />
     <Content Include="Examples\4. Navigation\end.htm" />
+    <Content Include="Examples\4. Navigation\layout.css" />
+    <Content Include="Examples\4. Navigation\layout.htm" />
     <Content Include="Examples\4. Navigation\start.htm" />
-    <Content Include="Examples\4. Navigation\default.htm" />
+    <Content Include="Examples\4. Navigation\index.html" />
     <Content Include="Examples\4. Navigation\start.js" />
     <Content Include="Examples\5. Lifecycle\end.css" />
     <Content Include="Examples\5. Lifecycle\end.js" />
-    <Content Include="Examples\5. Lifecycle\default.htm" />
+    <Content Include="Examples\5. Lifecycle\index.html" />
     <Content Include="Examples\5. Lifecycle\end.htm" />
     <Content Include="Examples\5. Lifecycle\start.htm" />
     <Content Include="Examples\5. Lifecycle\start.js" />
+    <Content Include="Examples\6. Webmail\1. Show Me Some Folders\index.html" />
+    <Content Include="Examples\6. Webmail\1. Show Me Some Folders\folders.css" />
+    <Content Include="Examples\6. Webmail\1. Show Me Some Folders\folders.htm" />
+    <Content Include="Examples\6. Webmail\1. Show Me Some Folders\folders.js" />
+    <Content Include="Examples\6. Webmail\2. What%27s in a Folder\index.html" />
+    <Content Include="Examples\6. Webmail\2. What%27s in a Folder\mails.css" />
+    <Content Include="Examples\6. Webmail\2. What%27s in a Folder\mails.htm" />
+    <Content Include="Examples\6. Webmail\2. What%27s in a Folder\mails.js" />
+    <Content Include="Examples\6. Webmail\2. What%27s in a Folder\folders.css" />
+    <Content Include="Examples\6. Webmail\2. What%27s in a Folder\folders.htm" />
+    <Content Include="Examples\6. Webmail\2. What%27s in a Folder\folders.js" />
+    <Content Include="Examples\6. Webmail\2. What%27s in a Folder\layout.htm" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\index.html" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\folders.css" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\folders.htm" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\folders.js" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\layout.htm" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\layout.js" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\mails.css" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\mails.htm" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\mails.js" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\viewMail.css" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\viewMail.htm" />
+    <Content Include="Examples\6. Webmail\3. You%27ve Got Mail\viewMail.js" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\index.html" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\folders.css" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\folders.htm" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\folders.js" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\layout.htm" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\layout.js" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\mails.css" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\mails.htm" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\mails.js" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\viewMail.css" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\viewMail.htm" />
+    <Content Include="Examples\6. Webmail\4. The Last Piece\viewMail.js" />
+    <Content Include="Examples\7. Todos\bindingHandlers.js" />
+    <Content Include="Examples\7. Todos\index.html" />
+    <Content Include="Examples\7. Todos\layout.css" />
+    <Content Include="Examples\7. Todos\layout.htm" />
+    <Content Include="Source\history.observableExtension.js" />
+    <Content Include="Examples\7. Todos\Todos\filters.css" />
+    <Content Include="Examples\7. Todos\Todos\filters.htm" />
+    <Content Include="Examples\7. Todos\Todos\filters.js" />
+    <Content Include="Examples\7. Todos\Todos\layout.css" />
+    <Content Include="Examples\7. Todos\Todos\layout.htm" />
+    <Content Include="Examples\7. Todos\Todos\layout.js" />
+    <Content Include="Examples\7. Todos\Todos\list.css" />
+    <Content Include="Examples\7. Todos\Todos\list.htm" />
+    <Content Include="Examples\7. Todos\Todos\list.js" />
+    <Content Include="Examples\7. Todos\Todos\newTodo.css" />
+    <Content Include="Examples\7. Todos\Todos\newTodo.htm" />
+    <Content Include="Examples\7. Todos\Todos\newTodo.js" />
+    <Content Include="Examples\7. Todos\Todos\Todo.js" />
+    <Content Include="knockout.composite.js" />
+    <Content Include="knockout.composite.min.js" />
     <Content Include="Source\utils.proxy.js" />
     <Content Include="Source\jquery.event.destroyed.js" />
     <Content Include="Source\Libraries\knockout-2.1.0.debug.js" />
@@ -100,6 +158,7 @@
     <Content Include="Tests\bindingHandlers.tests.js" />
     <Content Include="Tests\Panes\inlinePassingParent.htm" />
     <Content Include="Tests\Panes\inlinePassingChild.htm" />
+    <Content Include="Tests\Scripts\sinon-1.4.2.js" />
     <Content Include="Tests\utils.proxy.tests.js" />
     <Content Include="Tests\utils.objects.tests.js" />
     <Content Include="Tests\utils.panes.tests.js" />
@@ -128,7 +187,6 @@
     <Content Include="Tests\Panes\Subfolder\Nested\nestedChild.htm" />
     <Content Include="Tests\PubSub.tests.js" />
     <Content Include="Tests\Scripts\json2.js" />
-    <Content Include="Tests\Scripts\sinon.js" />
     <Content Include="Tests\single.htm" />
     <Content Include="Tests\Pane.tests.js" />
     <Content Include="Tests\navigation.tests.js" />
@@ -172,7 +230,7 @@
     <Content Include="Tests\Panes\region.htm" />
     <Content Include="Tests\Panes\region.js" />
     <Content Include="Tests\resources.tests.js" />
-    <Content Include="Tests\runner.htm" />
+    <Content Include="Tests\default.htm" />
     <Content Include="Tests\Scripts\jquery.mockjax.js" />
     <Content Include="Tests\Scripts\qunit.css" />
     <Content Include="Tests\Scripts\qunit.js" />
@@ -181,6 +239,8 @@
     <Content Include="Tests\Scripts\testHelpers.js" />
     <Content Include="Tests\Panes\basicTemplate.htm" />
     <Content Include="Tests\utils.paths.tests.js" />
+    <Content Include="Tools\jsPack.Core.dll" />
+    <Content Include="Tools\jsPack.exe" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests\NQUnit\NUnitQUnit.cs" />
@@ -208,13 +268,82 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="build.bat" />
+    <None Include="Examples\6. Webmail\data\folder\Archive" />
+    <None Include="Examples\6. Webmail\data\folder\Inbox" />
+    <None Include="Examples\6. Webmail\data\folder\Sent" />
+    <None Include="Examples\6. Webmail\data\folder\Spam" />
+    <None Include="Examples\6. Webmail\data\mail\1" />
+    <None Include="Examples\6. Webmail\data\mail\10" />
+    <None Include="Examples\6. Webmail\data\mail\11" />
+    <None Include="Examples\6. Webmail\data\mail\12" />
+    <None Include="Examples\6. Webmail\data\mail\13" />
+    <None Include="Examples\6. Webmail\data\mail\14" />
+    <None Include="Examples\6. Webmail\data\mail\15" />
+    <None Include="Examples\6. Webmail\data\mail\16" />
+    <None Include="Examples\6. Webmail\data\mail\17" />
+    <None Include="Examples\6. Webmail\data\mail\18" />
+    <None Include="Examples\6. Webmail\data\mail\19" />
+    <None Include="Examples\6. Webmail\data\mail\2" />
+    <None Include="Examples\6. Webmail\data\mail\20" />
+    <None Include="Examples\6. Webmail\data\mail\21" />
+    <None Include="Examples\6. Webmail\data\mail\22" />
+    <None Include="Examples\6. Webmail\data\mail\23" />
+    <None Include="Examples\6. Webmail\data\mail\24" />
+    <None Include="Examples\6. Webmail\data\mail\25" />
+    <None Include="Examples\6. Webmail\data\mail\26" />
+    <None Include="Examples\6. Webmail\data\mail\27" />
+    <None Include="Examples\6. Webmail\data\mail\28" />
+    <None Include="Examples\6. Webmail\data\mail\29" />
+    <None Include="Examples\6. Webmail\data\mail\3" />
+    <None Include="Examples\6. Webmail\data\mail\30" />
+    <None Include="Examples\6. Webmail\data\mail\31" />
+    <None Include="Examples\6. Webmail\data\mail\32" />
+    <None Include="Examples\6. Webmail\data\mail\33" />
+    <None Include="Examples\6. Webmail\data\mail\34" />
+    <None Include="Examples\6. Webmail\data\mail\35" />
+    <None Include="Examples\6. Webmail\data\mail\36" />
+    <None Include="Examples\6. Webmail\data\mail\37" />
+    <None Include="Examples\6. Webmail\data\mail\38" />
+    <None Include="Examples\6. Webmail\data\mail\39" />
+    <None Include="Examples\6. Webmail\data\mail\4" />
+    <None Include="Examples\6. Webmail\data\mail\40" />
+    <None Include="Examples\6. Webmail\data\mail\41" />
+    <None Include="Examples\6. Webmail\data\mail\42" />
+    <None Include="Examples\6. Webmail\data\mail\43" />
+    <None Include="Examples\6. Webmail\data\mail\44" />
+    <None Include="Examples\6. Webmail\data\mail\45" />
+    <None Include="Examples\6. Webmail\data\mail\46" />
+    <None Include="Examples\6. Webmail\data\mail\47" />
+    <None Include="Examples\6. Webmail\data\mail\48" />
+    <None Include="Examples\6. Webmail\data\mail\49" />
+    <None Include="Examples\6. Webmail\data\mail\5" />
+    <None Include="Examples\6. Webmail\data\mail\50" />
+    <None Include="Examples\6. Webmail\data\mail\51" />
+    <None Include="Examples\6. Webmail\data\mail\52" />
+    <None Include="Examples\6. Webmail\data\mail\53" />
+    <None Include="Examples\6. Webmail\data\mail\54" />
+    <None Include="Examples\6. Webmail\data\mail\55" />
+    <None Include="Examples\6. Webmail\data\mail\56" />
+    <None Include="Examples\6. Webmail\data\mail\57" />
+    <None Include="Examples\6. Webmail\data\mail\58" />
+    <None Include="Examples\6. Webmail\data\mail\59" />
+    <None Include="Examples\6. Webmail\data\mail\6" />
+    <None Include="Examples\6. Webmail\data\mail\60" />
+    <None Include="Examples\6. Webmail\data\mail\7" />
+    <None Include="Examples\6. Webmail\data\mail\8" />
+    <None Include="Examples\6. Webmail\data\mail\9" />
     <None Include="packages.config" />
     <None Include="Source\pack.config" />
+    <None Include="Tools\jsPack.exe.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>"$(ProjectDir)Tools\jsPack.exe" "$(ProjectDir)\" /recursive</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

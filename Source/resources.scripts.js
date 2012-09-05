@@ -11,9 +11,8 @@
         });
 
         function executeScript(script) {
-            if (ko.composite.options.debug.splitScripts === true) {
+            if (ko.composite.options.debug.splitScripts === true && shouldSplit(script)) {
                 var scripts = script.match(/(.*(\r|\n))*?(.*\/{2}\@ sourceURL.*)/g);
-                //var scripts = script.match(/(.|\r|\n)*?(\/{2}\@ sourceURL.*)/g);
 
                 if (scripts === null)
                     $.globalEval(appendSourceUrl(script));
@@ -31,5 +30,37 @@
         function appendSourceUrl(script) {
             return script + '\n//@ sourceURL=' + url;
         }
+
+        function shouldSplit(script) {
+            var tagMatches = script.match("(//@ sourceURL=)");
+            return tagMatches && tagMatches.length > 1;
+        }
+    };
+
+    resources.loadCrossDomainScript = function (url) {
+        return resources.loadResource(url, function () {
+            return resources.loadResource(url, function () {
+                var deferred = $.Deferred();
+
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                var failed = false;
+
+                script.addEventListener("load", function () {
+                    if (!failed)
+                        deferred.resolve();
+                }, false);
+
+                script.addEventListener("error", function () {
+                    failed = true;
+                    deferred.reject();
+                }, false);
+
+                script.src = url;
+                head.appendChild(script);
+
+                return deferred;
+            });
+        });
     };
 })(ko.composite.resources);

@@ -136,19 +136,19 @@ $(function () {
          });
     });
 
-     test("executeScript executes all split scripts", function () {
-         $.mockjax({ url: 'split', responseText: "var split1 = '1';\n//@ sourceURL=1.js\nvar split2 = '2';\n//@ sourceURL=2.js\n" });
-         ko.composite.resources.loadScript('split');
-         equal(split1, 1, "First script block executed");
-         equal(split2, 2, "Second script block executed");
-     });
+    test("executeScript executes all split scripts", function () {
+        $.mockjax({ url: 'split', responseText: "var split1 = '1';\n//@ sourceURL=1.js\nvar split2 = '2';\n//@ sourceURL=2.js\n" });
+        ko.composite.resources.loadScript('split');
+        equal(split1, 1, "First script block executed");
+        equal(split2, 2, "Second script block executed");
+    });
 
-     test("executeScript splits scripts and executes sequentially", function () {
-         $.mockjax({ url: 'split', responseText: "var split1 = splitTestFunction === undefined;\n//@ sourceURL=1.js\nfunction splitTestFunction() { }\nvar split2 = splitTestFunction !== undefined;\n" });
-         ko.composite.resources.loadScript('split');
-         ok(split1, "Function not available in first script block");
-         ok(split2, "Function available in second script block");
-     });
+    test("executeScript splits scripts and executes sequentially", function () {
+        $.mockjax({ url: 'split', responseText: "var split1 = splitTestFunction === undefined;\n//@ sourceURL=1.js\nfunction splitTestFunction() { }\nvar split2 = splitTestFunction !== undefined;\n" });
+        ko.composite.resources.loadScript('split');
+        ok(split1, "Function not available in first script block");
+        ok(split2, "Function available in second script block");
+    });
 
 
     module("resources.models");
@@ -165,5 +165,15 @@ $(function () {
         ko.composite.resources.assignModelPath('test');
         equal(ko.composite.models.test.constructor(), "test");
         equal(ko.composite.models.test.options.option, 'test');
+    });
+
+    test("script dependencies are loaded cross domain if a full URL is provided", function () {
+        var oldLoadFunction = ko.composite.resources.loadCrossDomainScript;
+        var spy = sinon.spy();
+        ko.composite.resources.loadCrossDomainScript = spy;
+        ko.composite.resources.loadDependencies('', { requires: { scripts: ['http://another.domain.com/script.js']} });
+        ko.composite.resources.loadCrossDomainScript = oldLoadFunction;
+
+        ok(spy.called);
     });
 });

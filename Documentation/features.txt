@@ -9,3 +9,11 @@ Great debugging experience with chrome
 Coming...
 Better memory management - automatic clean up when element is destroyed
 Automatic multi-threading with WebWorkers when panes have option set
+
+
+
+
+
+
+Notes
+Document type declaration must be <!DOCTYPE HTML>

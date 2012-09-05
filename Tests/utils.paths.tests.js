@@ -92,4 +92,12 @@
         equal(modifiedPane, pane);
         equal(modifiedPane.path, '/Test2/test');
     });
+
+    test('isFullUrl returns correct results', function () {
+        ok(utils.isFullUrl('http://google.com'));
+        ok(utils.isFullUrl('https://google.com'));
+        ok(utils.isFullUrl('svn://google.com'));
+        ok(!utils.isFullUrl('Path'));
+        ok(!utils.isFullUrl('/Path'));
+    });
 });

@@ -63,7 +63,6 @@ debug
 noPaneStylesheets
 globalRenderFunction
 navigateMode ('standard', 'reload')
-logLevel ('debug', 'info', 'warn', 'error')
 singlePubSub
 
 
@@ -82,10 +81,10 @@ clear - remove previous content
 ko.composite.logger
 -------------------
 errorCallback({ message, stack, error })
-debug = function (message) {
-info = function (message) {
-warn = function (message) {
-error = function (message, error) {
-ajax = function (url, jqXHR, textStatus, errorThrown) {
-log = function (level, message) {
-
+debug = function (message)
+info = function (message)
+warn = function (message)
+error = function (message, error)
+ajax = function (url, jqXHR, textStatus, errorThrown)
+log = function (level, message)
+setLogLevel = function(['debug', 'info', 'warn', 'error'])
