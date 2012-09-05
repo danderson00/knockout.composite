@@ -1,0 +1,11 @@
+﻿<ul id="filters">
+	<li>
+		<a data-bind="css: { selected: showMode() == 'all' }, click: setMode('all')">All</a>
+	</li>
+	<li>
+		<a data-bind="css: { selected: showMode() == 'active' }, click: setMode('active')">Active</a>
+	</li>
+	<li>
+		<a data-bind="css: { selected: showMode() == 'completed' }, click: setMode('completed')">Completed</a>
+	</li>
+</ul>

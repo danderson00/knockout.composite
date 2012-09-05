@@ -1,0 +1,11 @@
+﻿<div class="viewMail" data-bind="with: data">
+    <div class="mailInfo">
+        <h1 data-bind="text: subject"></h1>
+        <p><label>From</label>: <span data-bind="text: from"></span></p>
+        <p><label>To</label>: <span data-bind="text: to"></span></p>
+        <p><label>Date</label>: <span data-bind="text: date"></span></p>
+        <div class="message">
+            <p data-bind="html: messageContent" />            
+        </div>
+    </div>
+</div>

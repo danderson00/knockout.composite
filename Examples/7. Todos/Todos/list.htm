@@ -1,0 +1,15 @@
+﻿<section id="main" data-bind="visible: todos().length" style="">
+    <input id="toggle-all" data-bind="checked: todos.allCompleted" type="checkbox">
+    <label for="toggle-all">Mark all as complete</label>
+
+    <ul id="todo-list" data-bind="foreach: filteredTodos">
+        <li data-bind="css: { completed: completed, editing: editing }">
+            <div class="view">
+                <input class="toggle" data-bind="checked: completed" type="checkbox">
+                <label data-bind="text: title, event: { dblclick: $root.editItem }">asd</label>
+                <button class="destroy" data-bind="click: $root.remove"></button>
+            </div>
+            <input class="edit" data-bind="value: title, valueUpdate: 'afterkeydown', enterKey: $root.stopEditing, selectAndFocus: editing, event: { blur: $root.stopEditing }">
+        </li>
+    </ul>
+</section>

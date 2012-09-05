@@ -1,0 +1,56 @@
+﻿.mails {
+    width: 100%;
+    table-layout: fixed;
+    border-spacing: 0;
+}
+
+.mails thead {
+    background-color: #bbb;
+    font-weight: bold;
+    color: #444;
+    text-shadow: #f7f7f7 0 1px 1px;
+}
+
+.mails tbody tr:hover {
+    cursor: pointer;
+    background-color: #68c !important;
+    color: White;
+}
+
+.mails th, .mails td {
+    text-align: left;
+    padding: 0.4em 0.3em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mails th {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #888;
+    padding: 0.4em 0 0.3em 0.7em;
+}
+
+.mails th:nth-child(1), .mails td:nth-child(1) {
+    width: 20%;
+}
+
+.mails th:nth-child(2), .mails td:nth-child(2) {
+    width: 15%;
+}
+
+.mails th:nth-child(3), .mails td:nth-child(3) {
+    width: 45%;
+}
+
+.mails th:nth-child(4), .mails td:nth-child(4) {
+    width: 15%;
+}
+
+.mails th:last-child {
+    border-right: none;
+}
+
+.mails tr:nth-child(even) {
+    background-color: #EEE;
+}

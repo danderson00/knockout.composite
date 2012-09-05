@@ -1,0 +1,22 @@
+﻿<section id="todoapp">
+    <header id="header">
+        <h1>todos</h1>
+        <div data-bind="pane: 'newTodo', data: { todos: todos }"></div>
+    </header>    
+    
+    <div data-bind="pane: 'list', data: { todos: todos, showMode: showMode }"></div>
+
+    <footer id="footer" data-bind="visible: todos.completedCount() || todos.remainingCount()">
+        <span id="todo-count">
+            <strong data-bind="text: todos.remainingCount"></strong>
+            <span data-bind="text: getLabel( todos.remainingCount() )"></span> left
+        </span>
+
+        <div data-bind="pane: 'filters', data: { todos: todos, showMode: showMode }"></div>
+
+        <button id="clear-completed" data-bind="visible: todos.completedCount, click: todos.removeCompleted">
+            Clear completed (<span data-bind="text: todos.completedCount"></span>)
+        </button>
+    </footer>
+</section>
+

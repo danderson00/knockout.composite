@@ -1,0 +1,19 @@
+﻿<table class="mails" data-bind="with: data">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Subject</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    <tbody data-bind="foreach: mails">
+        <tr>
+            <td data-bind="text: from"></td>
+            <td data-bind="text: to"></td>
+            <td data-bind="text: subject"></td>
+            <td data-bind="text: date"></td>
+        </tr>     
+    </tbody>
+</table>

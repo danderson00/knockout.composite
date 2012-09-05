@@ -1,0 +1,3 @@
+﻿<ul class="folders" data-bind="foreach: folders">
+    <li data-bind="text: $data, css: { selected: $data === $root.selectedFolder() }, click: $root.selectFolder"></li>
+</ul>

@@ -1,0 +1,23 @@
+﻿#filters {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	position: absolute;
+	right: 0;
+	left: 0;
+}
+
+#filters li {
+	display: inline;
+}
+
+#filters li a {
+	color: #83756f;
+	margin: 2px;
+	text-decoration: none;
+    cursor: default;
+}
+
+#filters li a.selected {
+	font-weight: bold;
+}
