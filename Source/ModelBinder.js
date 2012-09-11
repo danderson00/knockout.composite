@@ -44,8 +44,14 @@
     }
 
     function renderIfNotDelayedOrCancelled() {
-        if (!(options && options.delayRender) && !(registration && registration.options && registration.options.delayRender) && renderCancelled !== true)
-            self.render();
+        if (shouldRender()) self.render();
+    }
+    
+    function shouldRender() {
+        return (pane.path || pane.inlineHtml) &&
+            !(options && options.delayRender) &&
+            !(registration && registration.options && registration.options.delayRender) &&
+            renderCancelled !== true;
     }
 
     this.render = function () {

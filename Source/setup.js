@@ -1,5 +1,6 @@
-﻿;
-// the above is a workaround for ajaxmin / resPack gayness
+﻿// knockout.composite JavaScript library v0.1
+// (c) Dale Anderson - http://danderson00.blogspot.com.au/
+// License: MIT (http://www.opensource.org/licenses/mit-license.php)
 (function () {
     if (!jQuery)
         throw 'jQuery must be loaded before knockout.composite can initialise';

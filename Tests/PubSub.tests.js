@@ -353,6 +353,7 @@
     });
 
     test("publish method should call all subscribers, even if there are exceptions", function () {
+        ko.composite.options.debug.handleExceptions = true;
         var message = getUniqueString(),
 		func1 = function () {
 		    throw ('some error');
@@ -368,6 +369,7 @@
 
         ok(spy1.called);
         ok(spy2.called);
+        ko.composite.options.debug.handleExceptions = false;
     });
 
     test("unsubscribe method should return token when succesful", function () {

@@ -3,19 +3,26 @@
         var $originalElement;
 
         this.start = function (element) {
-            $originalElement = $(element).fadeOut(100);
+            $originalElement = $(element);
+            if ($originalElement.children().length > 0)
+                $originalElement.fadeOut(100);
+            else
+                $originalElement.hide();
             return createTemporaryElement();
         };
 
         this.end = function (element) {
             var $element = $(element);
-            $originalElement
-                .stop(false, true)
-                .empty()
-                .append($element.children())
-                .fadeIn(200);
-            $element.remove();
-            return $originalElement[0];
+            if ($originalElement) {
+                $originalElement
+                    .stop(false, true)
+                    .empty()
+                    .append($element.children());
+                $element.remove();
+            }
+
+            var target = $originalElement || $element;
+            return target.fadeIn(200)[0];
         };
     };
 

@@ -3,6 +3,7 @@
 <head>
     <title>Single knockout.composite Test</title>
     <link rel="stylesheet" href="Scripts/qunit.css" type="text/css" media="screen">
+
     <script type="text/javascript" src="../Source/Libraries/jquery-1.7.1.js"></script>
     <script type="text/javascript" src="../Source/Libraries/knockout-2.1.0.debug.js"></script>
     <script type="text/javascript" src="Scripts/qunit.js"></script>
@@ -11,23 +12,10 @@
     <script type="text/javascript" src="Scripts/sinon-1.4.2.js"></script>
 
     <script type="text/javascript" src="../knockout.composite.js"></script>
-
     <script type="text/javascript" src="Scripts/defaults.js"></script>
     <script type="text/javascript" src="Scripts/testHelpers.js"></script>
 
-    <script type="text/javascript">
-        $(function () {
-            test("script dependencies are loaded cross domain if a full URL is provided", function () {
-                var oldLoadFunction = ko.composite.resources.loadCrossDomainScript;
-                var spy = sinon.spy();
-                ko.composite.resources.loadCrossDomainScript = spy;
-                ko.composite.resources.loadDependencies('', { requires: { scripts: ['http://another.domain.com/script.js']} });
-                ko.composite.resources.loadCrossDomainScript = oldLoadFunction;
-
-                ok(spy.called);
-            });
-        });
-    </script>
+    <script type="text/javascript" src="history.tests.js"></script>
 </head>
 <body>
     <h1 id="qunit-header">QUnit Test Suite</h1>

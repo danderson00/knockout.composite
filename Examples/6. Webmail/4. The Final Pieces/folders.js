@@ -8,8 +8,9 @@
         self.selectedFolder(folder);
         pubsub.publish('folderSelected', folder);
     };
-
-    self.childrenRendered = function() {
-        self.selectFolder(self.folders[0]);
+    
+    self.childrenRendered = function () {
+        if(!self.selectedFolder())
+            self.selectFolder(self.folders[0]);
     };
 });

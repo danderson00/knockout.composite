@@ -4,7 +4,7 @@
     self.data = ko.observable();
 
     self.initialise = function () {
-        $.getJSON('../data/folder/' + data.folder, self.data);
+        return $.getJSON('../data/folder/' + data.folder, self.data);
     };
     
     self.selectMail = function (mail) {

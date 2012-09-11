@@ -1,94 +1,78 @@
-﻿if ($(window).hashchange !== undefined) {
-    ko.composite.history = {};
-    (function (history) {
-        var updateTimer;
-        var pane;
-        var defaultHash;
-        var defaultOptions;
-        var defaultOptionsJson;
-        var currentOptionsJson;
+﻿(function() {
+    ko.composite.utils = ko.composite.utils || {};
+    ko.composite.utils.createHistory = createHistory;
 
-        history.properties = {};
-        history.currentOptions = parseCurrentOptions();
-        
-        $(window).hashchange(hashChanged);
+    if (ko.composite.hashProvider !== undefined)
+        ko.composite.history = createHistory();
+
+    function createHistory() {
+        var history = {};
+        var current = {};
+        var defaultOptions;
+        var pane;
+
+        ko.composite.hashProvider.addExternalChange(externalChange);
 
         history.initialise = function (navigationPane) {
             pane = navigationPane;
-            defaultHash = currentHash();
-            defaultOptions = { path: navigationPane.path, data: navigationPane.data, p: {} };
-            defaultOptionsJson = JSON.stringify(defaultOptions);
 
-            history.currentOptions = parseCurrentOptions();
-            currentOptionsJson = JSON.stringify(history.currentOptions);
-
-            navigationPane.path = history.currentOptions.path;
-            navigationPane.data = history.currentOptions.data;
-
-
-            pane.pubsub.subscribe('__navigate', navigating);
+            current = ko.composite.hashProvider.query();
+            navigationPane.path = current.path || navigationPane.path;
+            navigationPane.data = current.data || navigationPane.data;
+            current.path = navigationPane.path;
+            current.data = navigationPane.data;
+            defaultOptions = { path: current.path, data: current.data };
+            
+            pane.pubsub.subscribePersistent('__navigate', navigating);
         };
 
-        history.update = function() {
-            window.location.hash = JSON.stringify(getOptions(history.currentOptions));
+        history.update = function () {
+            updateHash();
         };
 
-        function getOptions(navigateOptions) {
-            return {
-                path: navigateOptions ? navigateOptions.path : undefined,
-                data: navigateOptions ? navigateOptions.data : undefined,
-                p: history.properties
-            };
-        }
+        history.setProperty = function(name, value) {
+            if (value === undefined) {
+                if (current.p) delete current.p[name];
+            } else {
+                if (!current.p) current.p = {};
+                current.p[name] = value;
+            }
+            updateHash();
+        };
 
-        function hashChanged() {
-            var hashOptions = parseCurrentOptions() || {};
-            var hashData = JSON.stringify(hashOptions.data);
-            var currentOptions = currentOptionsJson ? JSON.parse(currentOptionsJson) : {};
-            var currentData = JSON.stringify(currentOptions.data);
-
-            if (hashOptions.path !== currentOptions.path || hashData != currentData)
-                if(pane) pane.navigate(hashOptions.path, hashOptions.data);
+        history.getProperty = function(name) {
+            return current.p && current.p[name];
         };
         
+        function externalChange() {
+            var previous = current;
+            current = getCurrentFromHashObject();
+            if (current.path !== previous.path || !ko.composite.utils.equal(current.data, previous.data))
+                pane.navigate(current.path, current.data);
+        }
+        
         function navigating(navigateOptions) {
-            currentOptionsJson = JSON.stringify(getOptions(navigateOptions));
-            if (currentOptionsJson !== defaultOptionsJson || currentHash() !== defaultHash)
-                queueAction(function () {
-                    window.location.hash = currentOptionsJson;
-                    if (ko.composite.options.navigateMode === 'reload')
-                        window.location.reload();
-                });
+            current.path = navigateOptions.path;
+            current.data = navigateOptions.data;
+            updateHash();
         }
-
-        function parseCurrentOptions() {
-            var hash = currentHash();
-            var options;
-
-            if (ko.composite.options.bootstrapper)
-                options = ko.composite.options.bootstrapper(hash);
-
-            if (!options) {
-                if (hash)
-                    try {
-                        options = JSON.parse(hash);
-                        history.properties = options.p || { };
-                    } catch (e) { }
-                else
-                    history.properties = { };
-            }
-
-            return options ? options : defaultOptions;
+        
+        function updateHash() {
+            var hashObject = {};
+            if (current.path && current.path != defaultOptions.path) hashObject.path = current.path;
+            if (current.data && !ko.composite.utils.equal(current.data, defaultOptions.data)) hashObject.data = current.data;
+            if (ko.composite.utils.objectHasProperties(current.p)) hashObject.p = current.p;
+            ko.composite.hashProvider.update(hashObject);
         }
-
-        function queueAction(action) {
-            if (updateTimer)
-                clearTimeout(updateTimer);
-            updateTimer = setTimeout(action, 0);
+        
+        function getCurrentFromHashObject() {
+            var currentHash = ko.composite.hashProvider.query();
+            if (!currentHash.path) currentHash.path = defaultOptions.path;
+            if (!currentHash.data) currentHash.data = defaultOptions.data;
+            return currentHash;
         }
+        
+        return history;
+    }
+})();
 
-        function currentHash() {
-            return unescape(window.location.hash.replace(/^#/, ''));
-        }
-    })(ko.composite.history);
-}

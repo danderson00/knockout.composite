@@ -1,5 +1,6 @@
-;
-// the above is a workaround for ajaxmin / resPack gayness
+// knockout.composite JavaScript library v0.1
+// (c) Dale Anderson - http://danderson00.blogspot.com.au/
+// License: MIT (http://www.opensource.org/licenses/mit-license.php)
 (function () {
     if (!jQuery)
         throw 'jQuery must be loaded before knockout.composite can initialise';
@@ -515,10 +516,27 @@ function PubSub(options) {
                 else
                     target[property](null);        
     };
+
+    // this is taken from http://stackoverflow.com/questions/201183/how-do-you-determine-equality-for-two-javascript-objects
+    // while succinct, it's far from the most efficient implementation. If better efficiency is required, rip isEqual from underscore.
+    utils.equal = function(obj1, obj2) {
+        function equals(obj1, obj2) {
+            return JSON.stringify(obj1) === JSON.stringify($.extend(true, { }, obj1, obj2));
+        }
+
+        return obj1 === obj2 || (equals(obj1, obj2) && equals(obj2, obj1));
+    };
     
     function isPopulatedObservable(target) {
         return ko.isObservable(target) && !ko.isComputed(target) && target();
     }
+
+    utils.objectHasProperties = function(source) {
+        for (var property in source)
+            if (source.hasOwnProperty(property))
+                return true;
+        return false;
+    };
 })();if(!ko.composite.utils)
     ko.composite.utils = {};
 
@@ -963,8 +981,14 @@ function PubSub(options) {
     }
 
     function renderIfNotDelayedOrCancelled() {
-        if (!(options && options.delayRender) && !(registration && registration.options && registration.options.delayRender) && renderCancelled !== true)
-            self.render();
+        if (shouldRender()) self.render();
+    }
+    
+    function shouldRender() {
+        return (pane.path || pane.inlineHtml) &&
+            !(options && options.delayRender) &&
+            !(registration && registration.options && registration.options.delayRender) &&
+            renderCancelled !== true;
     }
 
     this.render = function () {
@@ -1046,7 +1070,8 @@ function PubSub(options) {
         $(element).on('destroyed', clean);
 
         if (this.handlesNavigation) {
-            if (transition) self.element = transition.start(self.element);
+            if ((self.path || self.inlineHtml) && transition)
+                self.element = transition.start(self.element);
 
             if (ko.composite.history)
                 ko.composite.history.initialise(self);
@@ -1057,13 +1082,12 @@ function PubSub(options) {
                 self.pubsub.unsubscribeTransient();
 
                 clean();
+                self.path = navigateOptions.path;
+                self.data = navigateOptions.data;
 
                 var transitionName = navigateOptions.hasOwnProperty('transition') ? navigateOptions.transition : self.transition;
                 transition = transitions.create(transitionName);
                 if (transition) self.element = transition.start(self.element);
-
-                self.path = navigateOptions.path;
-                self.data = navigateOptions.data;
 
                 self.monitor = new ko.composite.Monitor(rendered);
                 // this is duplicated in constructPubSub
@@ -1081,7 +1105,8 @@ function PubSub(options) {
 
         function rendered() {
             delete self.monitor;
-            if (transition) self.element = transition.end(self.element);
+            if ((self.path || self.inlineHtml) && transition)
+                self.element = transition.end(self.element);
             binder.renderComplete();
             self.pubsub.publishSync('paneRendered', self);
         }
@@ -1177,129 +1202,159 @@ function PubSub(options) {
         }
     };
 })();
-if ($(window).hashchange !== undefined) {
-    ko.composite.history = {};
-    (function (history) {
-        var updateTimer;
-        var pane;
-        var defaultHash;
-        var defaultOptions;
-        var defaultOptionsJson;
-        var currentOptionsJson;
+(function () {
+    var lastUpdatedValue;
+    var callbacks = [];
 
-        history.properties = {};
-        history.currentOptions = parseCurrentOptions();
-        
-        $(window).hashchange(hashChanged);
+    if ($(window).hashchange !== undefined) {
+        $(function() {
+            $(window).hashchange(function() {
+                if(currentHash() !== lastUpdatedValue)
+                    for (var i = 0; i < callbacks.length; i++)
+                        callbacks[i]();
+                lastUpdatedValue = null;
+            });
+        });
+    }
+    
+    ko.composite.hashProvider = {
+        addExternalChange: function(callback) {
+            callbacks.push(callback);
+        },
+        removeExternalChange: function (callback) {
+            callbacks.splice(callbacks.indexOf(callback), 1);
+        },
+        update: function (value) {
+            throttle(function() {
+                var hash = value && ko.composite.utils.objectHasProperties(value) ? JSON.stringify(value) : '';
+                lastUpdatedValue = hash;
+                window.location.hash = hash;
+            });
+        },
+        query: function () {
+            var hash = currentHash();
+            return hash ? JSON.parse(hash) : { };
+        }
+    };
+    
+    function currentHash() {
+        return window.location.hash.replace(/^#/, '');
+    } 
+
+    var updateTimer;
+    function throttle(action) {
+        if (updateTimer)
+            clearTimeout(updateTimer);
+        updateTimer = setTimeout(action, 20);
+    }
+})();
+(function() {
+    ko.composite.utils = ko.composite.utils || {};
+    ko.composite.utils.createHistory = createHistory;
+
+    if (ko.composite.hashProvider !== undefined)
+        ko.composite.history = createHistory();
+
+    function createHistory() {
+        var history = {};
+        var current = {};
+        var defaultOptions;
+        var pane;
+
+        ko.composite.hashProvider.addExternalChange(externalChange);
 
         history.initialise = function (navigationPane) {
             pane = navigationPane;
-            defaultHash = currentHash();
-            defaultOptions = { path: navigationPane.path, data: navigationPane.data, p: {} };
-            defaultOptionsJson = JSON.stringify(defaultOptions);
 
-            history.currentOptions = parseCurrentOptions();
-            currentOptionsJson = JSON.stringify(history.currentOptions);
-
-            navigationPane.path = history.currentOptions.path;
-            navigationPane.data = history.currentOptions.data;
-
-
-            pane.pubsub.subscribe('__navigate', navigating);
+            current = ko.composite.hashProvider.query();
+            navigationPane.path = current.path || navigationPane.path;
+            navigationPane.data = current.data || navigationPane.data;
+            current.path = navigationPane.path;
+            current.data = navigationPane.data;
+            defaultOptions = { path: current.path, data: current.data };
+            
+            pane.pubsub.subscribePersistent('__navigate', navigating);
         };
 
-        history.update = function() {
-            window.location.hash = JSON.stringify(getOptions(history.currentOptions));
+        history.update = function () {
+            updateHash();
         };
 
-        function getOptions(navigateOptions) {
-            return {
-                path: navigateOptions ? navigateOptions.path : undefined,
-                data: navigateOptions ? navigateOptions.data : undefined,
-                p: history.properties
-            };
-        }
+        history.setProperty = function(name, value) {
+            if (value === undefined) {
+                if (current.p) delete current.p[name];
+            } else {
+                if (!current.p) current.p = {};
+                current.p[name] = value;
+            }
+            updateHash();
+        };
 
-        function hashChanged() {
-            var hashOptions = parseCurrentOptions() || {};
-            var hashData = JSON.stringify(hashOptions.data);
-            var currentOptions = currentOptionsJson ? JSON.parse(currentOptionsJson) : {};
-            var currentData = JSON.stringify(currentOptions.data);
-
-            if (hashOptions.path !== currentOptions.path || hashData != currentData)
-                if(pane) pane.navigate(hashOptions.path, hashOptions.data);
+        history.getProperty = function(name) {
+            return current.p && current.p[name];
         };
         
+        function externalChange() {
+            var previous = current;
+            current = getCurrentFromHashObject();
+            if (current.path !== previous.path || !ko.composite.utils.equal(current.data, previous.data))
+                pane.navigate(current.path, current.data);
+        }
+        
         function navigating(navigateOptions) {
-            currentOptionsJson = JSON.stringify(getOptions(navigateOptions));
-            if (currentOptionsJson !== defaultOptionsJson || currentHash() !== defaultHash)
-                queueAction(function () {
-                    window.location.hash = currentOptionsJson;
-                    if (ko.composite.options.navigateMode === 'reload')
-                        window.location.reload();
-                });
+            current.path = navigateOptions.path;
+            current.data = navigateOptions.data;
+            updateHash();
         }
-
-        function parseCurrentOptions() {
-            var hash = currentHash();
-            var options;
-
-            if (ko.composite.options.bootstrapper)
-                options = ko.composite.options.bootstrapper(hash);
-
-            if (!options) {
-                if (hash)
-                    try {
-                        options = JSON.parse(hash);
-                        history.properties = options.p || { };
-                    } catch (e) { }
-                else
-                    history.properties = { };
-            }
-
-            return options ? options : defaultOptions;
+        
+        function updateHash() {
+            var hashObject = {};
+            if (current.path && current.path != defaultOptions.path) hashObject.path = current.path;
+            if (current.data && !ko.composite.utils.equal(current.data, defaultOptions.data)) hashObject.data = current.data;
+            if (ko.composite.utils.objectHasProperties(current.p)) hashObject.p = current.p;
+            ko.composite.hashProvider.update(hashObject);
         }
-
-        function queueAction(action) {
-            if (updateTimer)
-                clearTimeout(updateTimer);
-            updateTimer = setTimeout(action, 0);
+        
+        function getCurrentFromHashObject() {
+            var currentHash = ko.composite.hashProvider.query();
+            if (!currentHash.path) currentHash.path = defaultOptions.path;
+            if (!currentHash.data) currentHash.data = defaultOptions.data;
+            return currentHash;
         }
+        
+        return history;
+    }
+})();
 
-        function currentHash() {
-            return unescape(window.location.hash.replace(/^#/, ''));
-        }
-    })(ko.composite.history);
-}(function() {
+(function() {
     ko.extenders.history = function (target, options) {
         if (!options || !options.key) return;
 
         var key = options.key;
         var history = ko.composite.history;
+        ko.composite.hashProvider.addExternalChange(updateTarget);
+        var defaultValue = target();
 
-        var storedValue = history.properties[key];
+        var storedValue = history.getProperty(key);
         if (storedValue !== undefined)
             target(storedValue);
 
         target.subscribe(function (value) {
-            if (!value)
-                delete history.properties[key];
-            else
-                history.properties[key] = value;
+            history.setProperty(key, value);
             history.update();
         });
 
         function updateTarget() {
-            target(history.properties[key]);
+            target(history.getProperty(key) || defaultValue);
         }
 
-        $(window).hashchange(updateTarget);
+        ko.composite.hashProvider.addExternalChange(updateTarget);
         
         if(options.pane) {
             var oldDispose = options.pane.dispose;
             options.pane.dispose = function() {
                 if (oldDispose) oldDispose();
-                $(window).unbind('hashchange', updateTarget);
+                ko.composite.hashProvider.removeExternalChange(updateTarget);
             };
         }
         
@@ -1315,19 +1370,26 @@ ko.composite.transitions = {
         var $originalElement;
 
         this.start = function (element) {
-            $originalElement = $(element).fadeOut(100);
+            $originalElement = $(element);
+            if ($originalElement.children().length > 0)
+                $originalElement.fadeOut(100);
+            else
+                $originalElement.hide();
             return createTemporaryElement();
         };
 
         this.end = function (element) {
             var $element = $(element);
-            $originalElement
-                .stop(false, true)
-                .empty()
-                .append($element.children())
-                .fadeIn(200);
-            $element.remove();
-            return $originalElement[0];
+            if ($originalElement) {
+                $originalElement
+                    .stop(false, true)
+                    .empty()
+                    .append($element.children());
+                $element.remove();
+            }
+
+            var target = $originalElement || $element;
+            return target.fadeIn(200)[0];
         };
     };
 

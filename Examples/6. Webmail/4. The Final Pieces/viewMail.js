@@ -4,6 +4,6 @@
     self.data = ko.observable();
 
     self.initialise = function () {
-        $.getJSON('../data/mail/' + data.mailId, self.data);
+        return $.getJSON('../data/mail/' + data.mailId, self.data);
     };
 });

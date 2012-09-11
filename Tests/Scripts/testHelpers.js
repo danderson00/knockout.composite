@@ -1,5 +1,7 @@
-﻿
-(function () {
+﻿(function () {
+    ko.composite.options.debug.handleExceptions = false;
+    QUnit.testStart = setHashProvider;
+
     if (!window.Helpers)
         Helpers = {};
 
@@ -82,5 +84,38 @@
             unsubscribeAllExceptInternal: sinon.spy(),
             unsubscribe: sinon.spy()
         };
+    };
+
+    Helpers.setHashProvider = setHashProvider;
+    function setHashProvider() {
+        var callback;
+        var currentHash = '';
+
+        ko.composite.hashProvider = {
+            addExternalChange: function (callbackToSet) {
+                callback = callbackToSet;
+            },
+            removeExternalChange: function () {
+                callback = undefined;
+            },
+            update: function (value) {
+                currentHash = value ? JSON.stringify(value) : '';
+            },
+            query: function () {
+                return currentHash ? JSON.parse(currentHash) : {};
+            },
+            triggerChange: function () {
+                if (callback) callback();
+            }
+        };
+
+        return ko.composite.hashProvider;
+    };
+
+    Helpers.delay = function(tests, delay) {
+        setTimeout(function() {
+            tests();
+            start();
+        }, delay || 0);
     };
 })();

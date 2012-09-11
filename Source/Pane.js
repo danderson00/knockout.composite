@@ -28,7 +28,8 @@
         $(element).on('destroyed', clean);
 
         if (this.handlesNavigation) {
-            if (transition) self.element = transition.start(self.element);
+            if ((self.path || self.inlineHtml) && transition)
+                self.element = transition.start(self.element);
 
             if (ko.composite.history)
                 ko.composite.history.initialise(self);
@@ -39,13 +40,12 @@
                 self.pubsub.unsubscribeTransient();
 
                 clean();
+                self.path = navigateOptions.path;
+                self.data = navigateOptions.data;
 
                 var transitionName = navigateOptions.hasOwnProperty('transition') ? navigateOptions.transition : self.transition;
                 transition = transitions.create(transitionName);
                 if (transition) self.element = transition.start(self.element);
-
-                self.path = navigateOptions.path;
-                self.data = navigateOptions.data;
 
                 self.monitor = new ko.composite.Monitor(rendered);
                 // this is duplicated in constructPubSub
@@ -63,7 +63,8 @@
 
         function rendered() {
             delete self.monitor;
-            if (transition) self.element = transition.end(self.element);
+            if ((self.path || self.inlineHtml) && transition)
+                self.element = transition.end(self.element);
             binder.renderComplete();
             self.pubsub.publishSync('paneRendered', self);
         }

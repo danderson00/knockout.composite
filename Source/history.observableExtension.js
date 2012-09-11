@@ -4,30 +4,29 @@
 
         var key = options.key;
         var history = ko.composite.history;
+        ko.composite.hashProvider.addExternalChange(updateTarget);
+        var defaultValue = target();
 
-        var storedValue = history.properties[key];
+        var storedValue = history.getProperty(key);
         if (storedValue !== undefined)
             target(storedValue);
 
         target.subscribe(function (value) {
-            if (!value)
-                delete history.properties[key];
-            else
-                history.properties[key] = value;
+            history.setProperty(key, value);
             history.update();
         });
 
         function updateTarget() {
-            target(history.properties[key]);
+            target(history.getProperty(key) || defaultValue);
         }
 
-        $(window).hashchange(updateTarget);
+        ko.composite.hashProvider.addExternalChange(updateTarget);
         
         if(options.pane) {
             var oldDispose = options.pane.dispose;
             options.pane.dispose = function() {
                 if (oldDispose) oldDispose();
-                $(window).unbind('hashchange', updateTarget);
+                ko.composite.hashProvider.removeExternalChange(updateTarget);
             };
         }
         

@@ -44,8 +44,25 @@
                 else
                     target[property](null);        
     };
+
+    // this is taken from http://stackoverflow.com/questions/201183/how-do-you-determine-equality-for-two-javascript-objects
+    // while succinct, it's far from the most efficient implementation. If better efficiency is required, rip isEqual from underscore.
+    utils.equal = function(obj1, obj2) {
+        function equals(obj1, obj2) {
+            return JSON.stringify(obj1) === JSON.stringify($.extend(true, { }, obj1, obj2));
+        }
+
+        return obj1 === obj2 || (equals(obj1, obj2) && equals(obj2, obj1));
+    };
     
     function isPopulatedObservable(target) {
         return ko.isObservable(target) && !ko.isComputed(target) && target();
     }
+
+    utils.objectHasProperties = function(source) {
+        for (var property in source)
+            if (source.hasOwnProperty(property))
+                return true;
+        return false;
+    };
 })();
