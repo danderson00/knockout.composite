@@ -1317,8 +1317,8 @@ function PubSub(options) {
         
         function getCurrentFromHashObject() {
             var currentHash = ko.composite.hashProvider.query();
-            if (!currentHash.path) currentHash.path = defaultOptions.path;
-            if (!currentHash.data) currentHash.data = defaultOptions.data;
+            if (!currentHash.path && defaultOptions) currentHash.path = defaultOptions.path;
+            if (!currentHash.data && defaultOptions) currentHash.data = defaultOptions.data;
             return currentHash;
         }
         
