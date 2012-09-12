@@ -12,6 +12,7 @@
         var pubsub = { publish: sinon.spy() };
         var model = createModel('folders', pubsub);
         model.selectFolder('Sent');
+
         ok(pubsub.publish.calledOnce);
         equal(pubsub.publish.firstCall.args[0], 'folderSelected');
         equal(pubsub.publish.firstCall.args[1], 'Sent');
@@ -37,7 +38,8 @@
     test("initialise loads specified folder and sets data observable", function () {
         $.mockjax({
             url: '../data/folder/Sent',
-            responseText: JSON.stringify({ test: 'test' })
+            responseText: JSON.stringify({ test: 'test' }),
+            responseTime: 0
         });
 
         var model = createModel('mails', null, { folder: 'Sent' });

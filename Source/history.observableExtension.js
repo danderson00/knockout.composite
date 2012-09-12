@@ -1,6 +1,6 @@
 ﻿(function() {
     ko.extenders.history = function (target, options) {
-        if (!options || !options.key) return;
+        if (!ko.composite.hashProvider || !options || !options.key) return target;
 
         var key = options.key;
         var history = ko.composite.history;

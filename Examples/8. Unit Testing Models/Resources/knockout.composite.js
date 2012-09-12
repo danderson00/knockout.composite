@@ -1214,37 +1214,37 @@ function PubSub(options) {
                 lastUpdatedValue = null;
             });
         });
-    }
     
-    ko.composite.hashProvider = {
-        addExternalChange: function(callback) {
-            callbacks.push(callback);
-        },
-        removeExternalChange: function (callback) {
-            callbacks.splice(callbacks.indexOf(callback), 1);
-        },
-        update: function (value) {
-            throttle(function() {
-                var hash = value && ko.composite.utils.objectHasProperties(value) ? JSON.stringify(value) : '';
-                lastUpdatedValue = hash;
-                window.location.hash = hash;
-            });
-        },
-        query: function () {
-            var hash = currentHash();
-            return hash ? JSON.parse(hash) : { };
-        }
-    };
-    
-    function currentHash() {
-        return window.location.hash.replace(/^#/, '');
-    } 
+        ko.composite.hashProvider = {
+            addExternalChange: function(callback) {
+                callbacks.push(callback);
+            },
+            removeExternalChange: function (callback) {
+                callbacks.splice(callbacks.indexOf(callback), 1);
+            },
+            update: function (value) {
+                throttle(function() {
+                    var hash = value && ko.composite.utils.objectHasProperties(value) ? JSON.stringify(value) : '';
+                    lastUpdatedValue = hash;
+                    window.location.hash = hash;
+                });
+            },
+            query: function () {
+                var hash = currentHash();
+                return hash ? JSON.parse(hash) : { };
+            }
+        };
 
-    var updateTimer;
-    function throttle(action) {
-        if (updateTimer)
-            clearTimeout(updateTimer);
-        updateTimer = setTimeout(action, 20);
+        function currentHash() {
+            return window.location.hash.replace(/^#/, '');
+        } 
+
+        var updateTimer;
+        function throttle(action) {
+            if (updateTimer)
+                clearTimeout(updateTimer);
+            updateTimer = setTimeout(action, 20);
+        }
     }
 })();
 (function() {
@@ -1327,7 +1327,7 @@ function PubSub(options) {
 
 (function() {
     ko.extenders.history = function (target, options) {
-        if (!options || !options.key) return;
+        if (!ko.composite.hashProvider || !options || !options.key) return target;
 
         var key = options.key;
         var history = ko.composite.history;

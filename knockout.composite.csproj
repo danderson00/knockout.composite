@@ -111,6 +111,17 @@
     <Content Include="Examples\7. Todos\index.html" />
     <Content Include="Examples\7. Todos\layout.css" />
     <Content Include="Examples\7. Todos\layout.htm" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\configuration.js" />
+    <Content Include="Examples\8. Unit Testing Models\index.html" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\jquery-1.7.1.js" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\jquery.mockjax.js" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\json2.js" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\knockout-2.1.0.debug.js" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\knockout.composite.js" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\qunit.css" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\qunit.js" />
+    <Content Include="Examples\8. Unit Testing Models\Resources\sinon-1.4.2.js" />
+    <Content Include="Examples\8. Unit Testing Models\webmail.folders.tests.js" />
     <Content Include="Source\hashProvider.js" />
     <Content Include="Source\history.observableExtension.js" />
     <Content Include="Examples\7. Todos\Todos\filters.css" />
