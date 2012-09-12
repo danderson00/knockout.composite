@@ -415,7 +415,6 @@ function PubSub(options) {
             return '/' + path;
         return path;
     };
-
 })(ko.composite.utils);if (!ko.composite.utils)
     ko.composite.utils = {};
 
@@ -701,7 +700,7 @@ function PubSub(options) {
         }
 
         function appendSourceUrl(script) {
-            return script + '\n//@ sourceURL=' + url;
+            return script + '\n//@ sourceURL=' + url.replace(/ /g, "_");
         }
 
         function shouldSplit(script) {

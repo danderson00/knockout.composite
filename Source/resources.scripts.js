@@ -28,7 +28,7 @@
         }
 
         function appendSourceUrl(script) {
-            return script + '\n//@ sourceURL=' + url;
+            return script + '\n//@ sourceURL=' + url.replace(/ /g, "_");
         }
 
         function shouldSplit(script) {

@@ -91,5 +91,4 @@
             return '/' + path;
         return path;
     };
-
 })(ko.composite.utils);
