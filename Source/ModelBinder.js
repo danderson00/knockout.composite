@@ -31,6 +31,7 @@
             model = { pane: pane, data: pane.data };
 
         embedModelProperties(model, pane);
+        pane.model = model;
 
         if (model.dispose)
             ko.utils.domNodeDisposal.addDisposeCallback(pane.element, model.dispose);
