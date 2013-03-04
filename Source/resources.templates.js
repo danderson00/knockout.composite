@@ -5,12 +5,12 @@
     var loadedTemplates = {};
 
     resources.loadPaneTemplate = function (path, target) {
-        return resources.loadTemplate(utils.resourcePath(options.templatePath, path, options.templateExtension), target);
+        return resources.loadTemplate(utils.resourcePath(options.templatePath, path, options.templateExtension), target, path);
     };
 
-    resources.loadTemplate = function (url, target) {
-        if (resources.templateIsLoaded(url)) {
-            renderTemplate(resources.retrieveTemplate(url), target);
+    resources.loadTemplate = function (url, target, panePath) {
+        if (resources.templateIsLoaded(panePath || url)) {
+            renderTemplate(resources.retrieveTemplate(panePath || url), target);
             return null;
         }
 
@@ -21,17 +21,17 @@
                 async: !options.synchronous,
                 cache: false,
                 success: function (template) {
-                    resources.storeTemplate(url, template);
+                    resources.storeTemplate(panePath || url, template);
                 }
             });
         })).done(function () {
             if (target)
-                renderTemplate(resources.retrieveTemplate(url), target);
+                renderTemplate(resources.retrieveTemplate(panePath || url), target);
         });
     };
 
     resources.renderPaneTemplate = function (path, target) {
-        var template = resources.retrieveTemplate(templatePath(path));
+        var template = resources.retrieveTemplate(path);
         renderTemplate(template, target);
     };
 
@@ -57,8 +57,4 @@
     resources.retrieveTemplate = function (path) {
         return $('script[id="' + utils.pathIdentifier(path) + '"]').html();
     };
-
-    function templatePath(panePath) {
-        return utils.resourcePath(options.templatePath, panePath, options.templateExtension);
-    }
 })(ko.composite.resources);

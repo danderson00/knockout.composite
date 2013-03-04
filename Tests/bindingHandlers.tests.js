@@ -240,7 +240,7 @@ $(function () {
     asyncTest('binding handler passes correct element to pane', function () {
         expect(1);
         Helpers.renderPane('region', null, function () {
-            equal(Helpers.testContext.models.pane.pane.element, $('#region')[0]);
+            equal(Helpers.testContext.models.pane.pane.element, $('#mainRegion')[0]);
         });
     });
 

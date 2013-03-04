@@ -1,0 +1,17 @@
+﻿<div data-bind="visible: inProgress">
+    Current player: <span data-bind="text: currentPlayer"></span>
+</div>
+
+<div data-bind="visible: !inProgress() && winner()">
+    <span data-bind="text: winner"></span> wins!
+</div>
+
+<div data-bind="visible: !inProgress() && !winner()">
+    The game was a draw
+</div>
+
+<div class="board" data-bind="foreach: rows">
+    <div class="row" data-bind="foreach: $data">
+        <div class="piece" data-bind="click: $root.selectPiece, text: player, css: { winning: winningPiece }"></div>
+    </div>
+</div>

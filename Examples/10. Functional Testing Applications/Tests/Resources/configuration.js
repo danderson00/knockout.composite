@@ -1,4 +1,4 @@
-﻿ko.composite.options.basePath = '../6. Webmail/4. The Final Pieces/';
+﻿ko.composite.options.basePath = '../Panes';
 ko.composite.options.synchronous = true;
 $.mockjaxSettings.responseTime = 0;
     
@@ -15,3 +15,4 @@ function render(options, tests) {
     });
     return pane;
 };
+

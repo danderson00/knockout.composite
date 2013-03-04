@@ -32,7 +32,7 @@
         },
         initialise: function (model, preload) {
             if (preload) {
-                return $.when(ko.composite.resources.loadDependencies("", { requires: preload })).done(function () {
+                $.when(ko.composite.resources.loadDependencies("", { requires: preload })).done(function () {
                     ko.applyBindings(model);
                 });
             } else {
@@ -765,12 +765,12 @@ function PubSub(options) {
     var loadedTemplates = {};
 
     resources.loadPaneTemplate = function (path, target) {
-        return resources.loadTemplate(utils.resourcePath(options.templatePath, path, options.templateExtension), target, path);
+        return resources.loadTemplate(utils.resourcePath(options.templatePath, path, options.templateExtension), target);
     };
 
-    resources.loadTemplate = function (url, target, panePath) {
-        if (resources.templateIsLoaded(panePath || url)) {
-            renderTemplate(resources.retrieveTemplate(panePath || url), target);
+    resources.loadTemplate = function (url, target) {
+        if (resources.templateIsLoaded(url)) {
+            renderTemplate(resources.retrieveTemplate(url), target);
             return null;
         }
 
@@ -781,17 +781,17 @@ function PubSub(options) {
                 async: !options.synchronous,
                 cache: false,
                 success: function (template) {
-                    resources.storeTemplate(panePath || url, template);
+                    resources.storeTemplate(url, template);
                 }
             });
         })).done(function () {
             if (target)
-                renderTemplate(resources.retrieveTemplate(panePath || url), target);
+                renderTemplate(resources.retrieveTemplate(url), target);
         });
     };
 
     resources.renderPaneTemplate = function (path, target) {
-        var template = resources.retrieveTemplate(path);
+        var template = resources.retrieveTemplate(templatePath(path));
         renderTemplate(template, target);
     };
 
@@ -817,6 +817,10 @@ function PubSub(options) {
     resources.retrieveTemplate = function (path) {
         return $('script[id="' + utils.pathIdentifier(path) + '"]').html();
     };
+
+    function templatePath(panePath) {
+        return utils.resourcePath(options.templatePath, panePath, options.templateExtension);
+    }
 })(ko.composite.resources);(function (resources) {
     var options = ko.composite.options;
     var utils = ko.composite.utils;
@@ -835,6 +839,7 @@ function PubSub(options) {
         ko.composite.logger.debug('Model loaded');
     };
 
+    // firefox sucks. Seems to be no way to hook in to a failure event when loading scripts using a <script /> tag with a src attribute.
     resources.loadModel = function (path) {
         if (ko.composite.models[path]) {
             if (ko.composite.models[path].options)
@@ -895,7 +900,7 @@ function PubSub(options) {
                     var thisDependencyPath = list[i];
                     deferreds.push(utils.isFullUrl(thisDependencyPath)
                             ? crossDomainLoadFunction(thisDependencyPath)
-                            : loadFunction(dependencyPath(path, thisDependencyPath, basePath), null, basePath + thisDependencyPath));
+                            : loadFunction(dependencyPath(path, thisDependencyPath, basePath)));
                 }
         }
 
@@ -1197,80 +1202,7 @@ function PubSub(options) {
         }
     };
 })();
-// from http://benalman.com/projects/jquery-hashchange-plugin/
-// this does not support IE 6/7/8
-(function ($, window, undefined) {
-    var str_hashchange = 'hashchange',
-      doc = document,
-      fake_onhashchange,
-      special = $.event.special,
-
-      doc_mode = doc.documentMode,
-      supports_onhashchange = 'on' + str_hashchange in window && (doc_mode === undefined || doc_mode > 7);
-
-    function get_fragment(url) {
-        url = url || location.href;
-        return '#' + url.replace(/^[^#]*#?(.*)$/, '$1');
-    };
-
-    $.fn[str_hashchange] = function (fn) {
-        return fn ? this.bind(str_hashchange, fn) : this.trigger(str_hashchange);
-    };
-
-    $.fn[str_hashchange].delay = 50;
-
-    special[str_hashchange] = $.extend(special[str_hashchange], {
-
-        setup: function () {
-            if (supports_onhashchange) { return false; }
-            $(fake_onhashchange.start);
-        },
-
-        teardown: function () {
-            if (supports_onhashchange) { return false; }
-            $(fake_onhashchange.stop);
-        }
-    });
-
-    fake_onhashchange = (function () {
-        var self = {},
-          timeout_id,
-
-          last_hash = get_fragment(),
-
-          fn_retval = function (val) { return val; },
-          history_set = fn_retval,
-          history_get = fn_retval;
-
-        self.start = function () {
-            timeout_id || poll();
-        };
-
-        self.stop = function () {
-            timeout_id && clearTimeout(timeout_id);
-            timeout_id = undefined;
-        };
-
-        function poll() {
-            var hash = get_fragment(),
-              history_hash = history_get(last_hash);
-
-            if (hash !== last_hash) {
-                history_set(last_hash = hash, history_hash);
-
-                $(window).trigger(str_hashchange);
-
-            } else if (history_hash !== last_hash) {
-                location.href = location.href.replace(/#.*/, '') + history_hash;
-            }
-
-            timeout_id = setTimeout(poll, $.fn[str_hashchange].delay);
-        };
-
-        return self;
-    })();
-
-})(jQuery, this);(function () {
+(function () {
     var lastUpdatedValue;
     var callbacks = [];
 

@@ -32,7 +32,7 @@
         },
         initialise: function (model, preload) {
             if (preload) {
-                $.when(ko.composite.resources.loadDependencies("", { requires: preload })).done(function () {
+                return $.when(ko.composite.resources.loadDependencies("", { requires: preload })).done(function () {
                     ko.applyBindings(model);
                 });
             } else {

@@ -75,14 +75,6 @@ $(function () {
         equal($('script[id="Templates.test"]').html(), '<div></div>');
     });
 
-    test("templateIsLoaded returns true if corresponding script tag exists in head tag", function () {
-
-    });
-
-    test("retrieveTemplate returns HTML for stored template", function () {
-
-    });
-
     module("resources.scripts");
 
     // this ensures we can rely on a function being executed immediately (synchronously) after the script in a dynamically

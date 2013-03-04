@@ -1,13 +1,4 @@
 ﻿$(function() {
-    function render(options, tests) {
-        var pane = ko.composite.utils.addPane(document.body, options);
-        pane.pubsub.subscribe('rendered', function () {
-            tests();
-            start();
-        });
-        return pane;
-    };
-
     module("webmail.integration");
 
     asyncTest("Folders pane renders the correct number of buttons", function() {

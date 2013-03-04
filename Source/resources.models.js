@@ -16,7 +16,6 @@
         ko.composite.logger.debug('Model loaded');
     };
 
-    // firefox sucks. Seems to be no way to hook in to a failure event when loading scripts using a <script /> tag with a src attribute.
     resources.loadModel = function (path) {
         if (ko.composite.models[path]) {
             if (ko.composite.models[path].options)
@@ -77,7 +76,7 @@
                     var thisDependencyPath = list[i];
                     deferreds.push(utils.isFullUrl(thisDependencyPath)
                             ? crossDomainLoadFunction(thisDependencyPath)
-                            : loadFunction(dependencyPath(path, thisDependencyPath, basePath)));
+                            : loadFunction(dependencyPath(path, thisDependencyPath, basePath), null, basePath + thisDependencyPath));
                 }
         }
 

@@ -1,0 +1,22 @@
+﻿.board {
+    
+}
+
+.row {
+    clear: left;
+}
+
+.piece {
+    height: 50px;
+    width: 50px;
+    margin: 10px;
+    text-align: center;
+    float: left;
+    font-size: 48px;
+    font-weight: bold;
+    border: 1px solid black;
+}
+
+.winning.piece {
+    background-color: lightcoral;
+}

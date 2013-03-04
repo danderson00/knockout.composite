@@ -41,6 +41,13 @@
     <Content Include="Documentation\dependencies.txt" />
     <Content Include="Documentation\features.txt" />
     <Content Include="Documentation\options.txt" />
+    <Content Include="Examples\10. Functional Testing Applications\index.html" />
+    <Content Include="Examples\10. Functional Testing Applications\Panes\OX\board.htm" />
+    <Content Include="Examples\10. Functional Testing Applications\Panes\OX\board.css" />
+    <Content Include="Examples\10. Functional Testing Applications\Panes\OX\board.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Panes\layout.htm" />
+    <Content Include="Examples\10. Functional Testing Applications\Resources\configuration.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Resources\underscore.js" />
     <Content Include="Examples\2. Simple Communication\index.html" />
     <Content Include="Examples\2. Simple Communication\left.css" />
     <Content Include="Examples\2. Simple Communication\left.htm" />
@@ -133,6 +140,19 @@
     <Content Include="Examples\9. Integration Testing Panes\Resources\qunit.js" />
     <Content Include="Examples\9. Integration Testing Panes\Resources\sinon-1.4.2.js" />
     <Content Include="Examples\9. Integration Testing Panes\webmail.integration.tests.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Tests\index.html" />
+    <Content Include="Examples\10. Functional Testing Applications\Tests\Resources\configuration.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Resources\jquery-1.7.1.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Tests\Resources\jquery.mockjax.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Resources\json2.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Resources\knockout-2.1.0.debug.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Resources\knockout.composite.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Tests\Resources\qunit.css" />
+    <Content Include="Examples\10. Functional Testing Applications\Tests\Resources\qunit.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Tests\Resources\sinon-1.4.2.js" />
+    <Content Include="Examples\10. Functional Testing Applications\Tests\webmail.functional.tests.js" />
+    <Content Include="index.html" />
+    <Content Include="Source\hashChange.js" />
     <Content Include="Source\hashProvider.js" />
     <Content Include="Source\history.observableExtension.js" />
     <Content Include="Examples\7. Todos\Todos\filters.css" />
@@ -357,6 +377,8 @@
     <None Include="Examples\6. Webmail\data\mail\8" />
     <None Include="Examples\6. Webmail\data\mail\9" />
     <None Include="packages.config" />
+    <None Include="publish.ps1" />
+    <None Include="README" />
     <None Include="Source\pack.config" />
     <None Include="Tools\jsPack.exe.config" />
   </ItemGroup>
